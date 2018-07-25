@@ -1,0 +1,23 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+
+{% block title %}Rankings{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+<link href="{% static "rankings/ranking.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block main-content %}
+	<h1>Rankings</h1>
+
+	<p>Lista rankingów:</p>
+	<ul>
+		{% for ranking in rankings %}
+			<li><a href="{% url "ranking" ranking.pk %}">{{ ranking.name }}</a></li>
+		{% endfor %}
+	</ul>
+
+	<p>Ranking:</p>
+	{{ rendered_ranking }}
+{% endblock %}

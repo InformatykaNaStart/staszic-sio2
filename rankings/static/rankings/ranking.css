@@ -1,0 +1,72 @@
+table.ranking {
+	text-align: center;
+	vertical-align: middle;
+	border-collapse: collapse;
+	text-align: left;
+}	
+
+table.ranking tr {
+	height: 4ex;
+}
+
+table.ranking th {
+	text-align: center;
+	padding: 0 1em;
+}
+
+table.ranking td.place, table.ranking td.score, table.ranking td.row_summary {
+	text-align: center;
+}
+
+table.ranking td.score-null {
+	color: gray;
+}
+
+table.ranking td div.combined {
+	position: relative;
+	display: inline-block;
+	cursor: help;
+	border-bottom: 1px darkgray dotted;
+}
+
+table.ranking td div.combined span.combined-tooltip {
+	visibility: hidden;
+	width: 16em;
+	text-align: left;
+	background-color: darkgray;
+	padding: 5px 5px;
+	font-family: monospace;
+	border-radius: 6px;
+
+	border: solid 2px black;
+
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -8em;
+	z-index: 1;
+
+	cursor: auto;
+}
+table.ranking td div.combined:hover span.combined-tooltip {
+	visibility: visible;
+}
+table.ranking td div.combined span.combined-tooltip::after {
+    content: " ";
+    position: absolute;
+    bottom: 100%;  /* At the top of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent transparent black transparent;
+}
+
+table.ranking tr.medal-gold td:first-child { background-color: gold; }
+table.ranking tr.medal-gold td:nth-child(2) { background: linear-gradient(to right, gold, transparent); }
+table.ranking tr.medal-silver td:first-child { background-color: silver; }
+table.ranking tr.medal-silver td:nth-child(2) { background: linear-gradient(to right, silver, transparent); }
+table.ranking tr.medal-bronze td:first-child { background-color: #CD7F32; }
+table.ranking tr.medal-bronze td:nth-child(2) { background: linear-gradient(to right, #CD7F32, transparent); }
+
+

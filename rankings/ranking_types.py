@@ -1,0 +1,129 @@
+# coding: utf-8
+from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
+from oioioi.contests.models import ProblemInstance
+from utils import stacked_inline_for
+from ranking_columns import ProblemInstanceColumn
+from models import RoundRankingConfig
+
+class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
+    modules_with_subclasses = ['ranking_types']
+    abstract = True
+
+    def __init__(self, ranking):
+        self.ranking = ranking
+        self.contest = ranking.contest
+
+    def get_columns(self):
+        raise NotImplementedError
+
+    @classmethod
+    def get_admin_inlines(cls):
+        return []
+
+    def calculate_data(self):
+        data = []
+        umap = {}
+        columns = self.get_columns()
+        ncolumns = len(columns)
+
+        for i, column in enumerate(columns):
+            scores = column.get_scores()
+
+            for k, v in scores.items():
+                if k not in umap:
+                    row = dict(user=k, scores=[None] * ncolumns)
+                    umap[k] = row
+                    data.append(row)
+                else:
+                    row = umap[k]
+
+                row['scores'][i] = v
+        
+        ranking = dict(
+                columns = columns,
+                data = data,
+        )
+
+        return ranking
+
+    def finalize_ranking(self, request, ranking_data):
+        ranking_data = self.filter_columns(request, ranking_data)
+        ranking_data = self.put_keys(request, ranking_data)
+        ranking_data = self.order_rows(request, ranking_data)
+        ranking_data = self.put_places(request, ranking_data)
+
+        return ranking_data
+
+    def filter_columns(self, request, ranking_data):
+        all_columns = ranking_data['columns']
+        selector = [column.can_access(request) for column in all_columns]
+
+        def select(data, selector):
+            return [piece for piece, sel in zip(data, selector) if sel]
+
+        ranking_data['columns'] = select(ranking_data['columns'], selector)
+        new_scores = []
+        for row in ranking_data['data']:
+            row['scores'] = select(row['scores'], selector)
+            if any(x is not None for x in row['scores']):
+                new_scores.append(row)
+
+        ranking_data['data'] = new_scores
+        return ranking_data
+    
+    def put_keys(self, request, ranking_data):
+        for row in ranking_data['data']:
+            row['key'] = -sum(score.score for score in row['scores'] if score is not None)
+
+        return ranking_data
+
+    def order_rows(self, request, ranking_data):
+        ranking_data['data'].sort(key=lambda x: x['key'])
+        return ranking_data
+
+    def put_places(self, request, ranking_data):
+        curr_place = 0
+        last_score = None
+        idx = 1
+
+        for row in ranking_data['data']:
+            if row['key'] != last_score:
+                curr_place = idx
+            last_score = row['key']
+            idx += 1
+
+            row['place'] = curr_place
+        return ranking_data
+
+class ContestRanking(RankingTypeBase):
+    description = 'Ranking for the whole contest'
+    type_id = 'contest_ranking'
+
+    @classmethod
+    def get_admin_inlines(cls):
+        return super(ContestRanking, cls).get_admin_inlines() + [stacked_inline_for(RoundRankingConfig, cls)]
+
+    @property
+    def config(self):
+        if hasattr(self.ranking, 'roundrankingconfig'):
+            return self.ranking.roundrankingconfig
+        return RoundRankingConfig()
+    
+    def get_columns(self):
+        result = []
+
+        for problem_instance in ProblemInstance.objects.filter(round__contest=self.contest).order_by('round__start_date', 'short_name'):
+            result.append(ProblemInstanceColumn(self.ranking, problem_instance, **self.config.dict_config))
+
+        return result
+
+
+# komentuję, bo sypie 500 ~hugo
+
+#class RoundRanking(RankingTypeBase):
+#    description = 'Ranking for a round'
+#    type_id = 'round_ranking'
+#    
+#    @classmethod
+#    def get_admin_inlines(cls):
+#        return [stacked_inline_for(RoundRankingConfig, cls)]

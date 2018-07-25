@@ -1,0 +1,113 @@
+from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
+from staszic.rankings.ranking_scores import SingleScore, CombinedScore
+from django.template import Engine, Context
+
+class RankingColumnBase(RegisteredSubclassesBase, ObjectWithMixins):
+    modules_with_subclasses = ['ranking_columns']
+    abstract = True
+
+    def __init__(self, ranking):
+        self.ranking = ranking
+        self.contest = ranking.contest
+
+    def render_header(self):
+        raise NotImplementedError
+
+    def get_scores(self):
+        raise NotImplementedError
+
+    def can_access(self, request):
+        return False
+
+class ProblemInstanceColumn(RankingColumnBase):
+    description = 'Problem instance'
+
+    header_template = Engine.get_default().from_string('<span title="{{ full_name }}"><a href="#">{{ short_name }}</a></span>')
+
+    def __init__(self, ranking, problem_instance, round_coef, round_type, contest_coef, contest_type, visibility_type):
+        super(ProblemInstanceColumn, self).__init__(ranking)
+        self.problem_instance = problem_instance
+
+        self.round_config = dict(type=round_type, coef=round_coef)
+        self.contest_config = dict(type=contest_type, coef=contest_coef)
+        
+        self.visible_after = self.when_visible(problem_instance.round, visibility_type)
+
+    def when_visible(self, round, type):
+        if type == 'always':
+            return round.start_date
+        if type == 'end':
+            return round.end_date
+        if type == 'results':
+            return round.results_date
+        if type == 'none':
+            return None
+
+    def can_access(self, request):
+        if self.visible_after is None: return False
+        return request.timestamp >= self.visible_after
+
+    def render_header(self):
+        return self.header_template.render(Context(dict(
+            short_name = self.problem_instance.short_name,
+            full_name = self.problem_instance.problem.name
+        )))
+
+    def get_scores(self):
+        submissions = self.problem_instance.submission_set.filter(kind='NORMAL').exclude(score=None).order_by('-date')
+
+        start_date = self.problem_instance.round.start_date
+        end_date = self.problem_instance.round.end_date
+
+        round_scores = self.get_round_scores(submissions, self.round_config['type'], lambda x: start_date <= x.date <= end_date)
+        contest_scores = self.get_round_scores(submissions, self.contest_config['type'], lambda x: start_date <= x.date)
+
+        return self.combine_scores(
+                ('contest', round_scores, self.round_config['coef']),
+                ('alltime', contest_scores, self.contest_config['coef'])
+            )
+
+    def get_round_scores(self, qs, type, filter):
+        result = dict()
+        for sub in qs:
+            if filter(sub):
+                self.put_score(result, type, self.score_for_sub(sub))
+        
+        return result
+
+    def score_for_sub(self, sub):
+        return SingleScore(sub.user, sub, sub.score.value)
+
+    def put_score(self, container, type, score):
+        if self.better_score(container.get(score.user, None), type, score):
+            container[score.user] = score
+
+    def better_score(self, orig, type, new):
+        if orig is None: return True
+        if type == 'last': return False
+        if type == 'best': return new.score > orig.score
+        if type == 'rlast': return new.score > orig.score and new.submission.is_revealed
+
+        assert False
+
+    def combine_scores(self, *args):
+        result = dict()
+
+        args = filter(lambda x: x[2] != 0, args)
+        
+        if len(args) == 1:
+            (_, scores, _), = args
+            return scores
+
+        for name, scores, coef in args:
+            for user, score in scores.items():
+               result[user] = self.combine(result.get(user, None), name, score, coef)
+
+        return result
+
+    def combine(self, orig, name, new, coef):
+        if orig is None: return CombinedScore.single(name, new, coef)
+        else: return orig.combine_with(name, new, coef)
+
+    def __repr__(self):
+        return u'<ProblemInstanceColumn pi={}>'.format(self.problem_instance)
