@@ -1,0 +1,44 @@
+{% extends "base-with-menu.html" %}
+{% load static %}
+
+{% block title %}Virtual contests{% endblock %}
+{% block styles %}
+{{ block.super }}
+<link href="{% static "virtual/virtual.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block main-content %}
+
+<div class="clearfix">
+	<h1>Virtual contests</h1>
+	<h2>{{ vcontest }}</h1>
+</div>
+
+<p><strong>Contest duration: </strong> {{ vcontest.duration }} minutes.</p>
+
+<h3>Problems</h3>
+<table class="table vproblems">
+<thead>
+	<tr>
+		<th>ID</th>
+		<th>Problem</th>
+		<th>Max score</th>
+	</tr>
+</thead>
+<tfoot>
+	<th></th>
+	<th style="text-align:right">Total:</th>
+	<th>{{ total_score }}
+</tfoot>
+<tbody>
+	{% for p in problems %}
+	<tr>
+		<td>{{ p.problem.short_name }}</td>
+		<td>{{ p.problem.problem.name }}</td>
+		<td>{{ p.max_score }}</td>
+	</tr>
+	{% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

@@ -17,7 +17,6 @@
 	</thead>
 
 	<tbody>
-        {{ data }}
 		{% for row, medal in data.data|zip:medals %}
 		<tr class="{{medal}}">
 			<td class="place">{{ row.place }}</td>
@@ -34,8 +33,3 @@
 		{% endfor %}
 	</tbody>
 </table>
-<pre>
-{{debug}}
-
-{{data.row_summary}}
-</pre>

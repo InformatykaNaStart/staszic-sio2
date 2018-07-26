@@ -1,0 +1,55 @@
+
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+{% load i18n %}
+
+{% block title %}{%trans "Archive" %}{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block main-content %}
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="/">SIO2</a></li>
+        <li><a href={% url "archive-home" %}>{%trans "Archive" %}</a></li>
+        {% if old_contest.sio2dead %}
+            <li><a href={% url "archive-home" %}>{%trans "sio2-dead" %}</a></li>
+        {% endif %}
+        <li><a href="#">{{ old_contest.name }}</a></li>
+        <li><a href="#">{% trans "Problems"%}</a></li>
+    </ol>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>{%trans "Problems"%}</strong>
+        </div>
+        
+        <table class="table table-striped">
+            <tbody>
+                {% for p in problems %}
+                    <tr>
+ 
+                        <td style="vertical-align:middle; padding-left:1.5em">
+                            <a href={% url "archive-statement" old_contest.short_name p.problem.problem_id %}> {{p.problem.name}} </a>
+                        </td>
+                        <td style="text-align:right">
+                            <a type="button" type="button" class="btn btn-default" style="margin-right:2ex" 
+                            href={% url "archive-package" p.problem.problem_id %}>
+
+                                    {%trans "Download package"%}
+                            </a>
+                        </td>
+ 
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+        
+{% endblock %}

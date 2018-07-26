@@ -1,0 +1,69 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+{% load i18n %}
+
+{% block title %}{%trans "Archive"%}{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block main-content %}
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="/">SIO2</a></li>
+        <li><a href={% url "archive-home" %}>{%trans "Archive" %}</a></li>
+        <li><a href="#">{{ old_contest.name }}</a></li>
+        {% if all_submissions %}
+            <li><a href="#">{% trans "All submissions" %}</a></li>
+        {% else %}
+            <li><a href="#">{% trans "Submissions" %}</a></li>
+        {% endif %}
+    </ol>
+
+    <div class="panel panel-default">
+
+        
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>{% trans "Time" %}</th>
+                    {% if all_submissions %}
+                    <th>{% trans "Author" %}</th>
+                    {% endif %}
+                    <th>{% trans "Problem" %}</th>
+                    <th style="text-align:center">{% trans "Status" %}</th>
+                    <th style="text-align:center">{% trans "Score" %}</th>
+                    <th> </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in submissions %}
+                    <tr>
+                        <td> {{record.date}} </td>
+                        {% if all_submissions %}
+                            <td>{{record.author.username}}</td>
+                        {% endif %}
+                        <td>{{ record.problem_instance.problem.name }} ({{ record.problem_instance.problem.short_name }})</td>
+                        <td class="submission--{{ record.status }}" style="text-align:center">
+                                {{ record.status }}
+                        </td>
+                        <td style="text-align:center">
+                            {% if record.score != None %}
+                                {{ record.score }}
+                            {% endif %}                            
+                        </td>
+                        <td style="text-align:center">
+                            <a href="{% url 'archive-code' record.submission_id %}">{% trans "Download code" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+        
+{% endblock %}

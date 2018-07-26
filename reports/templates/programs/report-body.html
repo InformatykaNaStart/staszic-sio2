@@ -1,0 +1,54 @@
+{% extends "programs/report-body.html" %}
+
+{% load i18n %}
+
+{% block styles %}    
+    {{ block.super }}
+    <style>
+        .isolate_meta
+        {
+            font-family: monospace; 
+            white-space: pre;
+        }
+        .isolate_meta_key:
+        {
+            font-weight: bold;
+        }
+        td.io
+        {
+            text-align:center;
+            width:33%;
+        }
+    </style>
+{% endblock %}
+
+{% block test_options %}
+<a id="info_b_{{ test.id }}">
+	info
+</a>
+{% endblock %}
+
+{% block per_test_report %}
+
+<div class="modal fade" tabindex=-1 id="info_m_{{ test.id }}">
+	<div class="modal-dialog modal-bi">
+		<div class="modal-content">
+		    <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal">&times;</button>
+		        <h4 class="modal-title">Test report details</h4>
+		    </div>
+		    <div class="modal-body" id="info_mc_{{test.id}}">
+		    	
+		    </div>
+		</div>
+	</div>
+</div>
+<script>
+	$('#info_b_{{ test.id }}').on('click',function(){
+	    $('#info_mc_{{ test.id }}').load('{% url 'report-modal' test.id %}',function(){
+	        $('#info_m_{{ test.id }}').modal({show:true});
+	    });
+	});
+</script>
+
+{% endblock %}

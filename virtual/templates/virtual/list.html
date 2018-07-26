@@ -1,0 +1,35 @@
+{% extends "base-with-menu.html" %}
+{% load static %}
+
+{% block title %}Virtual contests{% endblock %}
+{% block styles %}
+{{ block.super }}
+<link href="{% static "virtual/virtual.css" %}" rel="stylesheet">
+{% endblock %}
+
+{% block main-content %}
+
+<div class="clearfix">
+	<h1 class="pull-left">Virtual contests</h1>
+</div>
+
+<table class="table virtuals">
+<thead>
+	<tr>
+		<th>Name</th>
+		<th>Difficulty</th>
+		<th>Actions</th>
+	</tr>
+</thead>
+<tbody>
+	{% for vc in vcs %}
+	<tr>
+		<td>{{ vc.vc.round.name }}</td>
+		<td>{{ vc.vc.difficulty }}</td>
+		<td>{% for _, action in vc.actions %}{{ action }} {% endfor %}</td>
+	</tr>
+	{% endfor %}
+</tbody>
+</table>
+
+{% endblock %}

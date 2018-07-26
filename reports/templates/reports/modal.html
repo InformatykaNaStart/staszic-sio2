@@ -1,0 +1,58 @@
+{% load i18n %}
+
+{% if can_admin %}
+    <div class="panel panel-default">
+		<div class="panel-heading">Input and output</div>
+		<table class="table">
+		    <tbody>
+		        <tr>
+	                <td class="io"><a title="{% trans 'Download output for this test' %}"
+	                   href="{% url 'download_output_file' test_id=test.test.id %}">
+	                    Output
+	                </a></td>
+	                <td class="io"><a title="{% trans 'Download input for this test' %}"
+	                   href="{% url 'download_input_file' test_id=test.test.id %}">
+	                    Input
+	                </a></td>
+		            <td class="io">
+		                {% if allow_download_out and test.test or can_admin %}
+		                    {% if test.generate_status == 'OK' %}
+		                        <a href="{% url 'download_user_output' testreport_id=test.id %}"
+		                           title="{% trans 'Download user output for this test' %}">
+		                            {% trans "User output" %}
+		                        </a>
+		                    {% elif test.generate_status == '?' %}
+		                        <span>{% trans "Processing" %}</span>
+		                    {% else %}
+		                        <a href="#" data-post-url="{% url 'generate_user_output' testreport_id=test.id %}"
+		                           title="{% trans 'Generate user output for this test' %}">
+		                            {% trans "Generate user out" %}
+		                        </a>
+		                    {% endif %}
+		                {% endif %}
+		            </td>
+		        </tr>
+		    </tbody>
+		</table>
+    </div>
+{% endif %}
+
+
+{% if request.user.is_superuser %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Isolate metadata</div>
+        <table class="table" style="width: 100%">
+            <tbody  id="info_meta_{{ test.id }}">
+                {{ isolate_meta }}
+            </tbody>
+        </table>
+    </div>
+{% endif %}
+
+
+{% if allow_test_comments or can_admin or config.stderr_visible %}
+    <div class="panel panel-danger">
+        <div class="panel-heading">Standard error stream</div>
+        <div class="panel-body" style="font-family: monospace; white-space: pre;" id="info_re_{{ test.id }}">{{test.stderr}}</div>
+    </div>
+{% endif %}

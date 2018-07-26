@@ -79,7 +79,7 @@ class TableRenderer(RankingRendererBase):
 
         return render_to_string('rankings/table.html', request=request, context=dict(
             data = ranking_data,
-            debug = pprint.pformat(ranking_data),
+            #debug = pprint.pformat(ranking_data),
             medals = self.get_medals(ranking_data)
         ))
 

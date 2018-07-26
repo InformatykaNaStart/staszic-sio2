@@ -1,0 +1,18 @@
+{% extends "base-with-menu.html" %}
+
+{% block title %}Virtual contests{% endblock %}
+
+{% block main-content %}
+
+<div class="clearfix">
+	<h1 class="pull-left">Virtual contests</h1>
+</div>
+
+<div class="empty-space-filler text-center">
+	Obecnie startujesz już w konkursie {{ vc }}.
+	Skończy się on {{ vce.end_date }}.
+</div>
+
+<p><strong>Akcje:</strong>{% for _, action in actions %} {{action}}{% endfor %}.</p>
+
+{% endblock %}

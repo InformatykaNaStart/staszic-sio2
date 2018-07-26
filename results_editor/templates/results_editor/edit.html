@@ -1,0 +1,47 @@
+{% load i18n %}
+
+<style>
+span.submission {
+    padding: 0.2em;
+    border: 1px solid #888888;
+    margin: 0.2em;
+
+}
+table.st {
+    width:100%;
+}
+td.xsubmission {
+    padding:0.7em;
+    border: 1px solid #888888;
+    text-align:center;
+}
+</style>
+
+        <form action="{%url 'edit_results' submission.id %}" method="post" class="px-4 py-3">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_comment">{% trans "Comment" %}</label><br>
+                <textarea class="form-control" id="id_comment" name="comment">{{submission.comment}}</textarea>
+            </div>
+            {% if submission.score %}
+                <div class="form-group ">
+                    <label for="id_score">{% trans "Score" %}</label><br>
+                    <input type="number" id="id_score" name="score" value="{{submission.score}}" />
+                </div>
+            {% else %}
+                <input type="hidden" id="id_score" name="score" value="0"/>
+            {% endif %}
+            <div class="form-group"">
+                <label for="id_status">{% trans "Status" %}</label><br>
+                <select id="id_status"  name="status">
+                    {% for s in statuses %}
+                        <option value="{{s.0}}" {% if s.0 == submission.status %}selected{%endif%}>{{s.1}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="OK"/>
+            </div>
+        </form>
+
+

@@ -1,0 +1,38 @@
+{% extends "programs/submission_header.html" %}
+{% load i18n %}
+
+{% block admin_buttons %}
+    {{block.super}}
+    <btn class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#er_modal">
+         <span class="glyphicon glyphicon-pencil"></span>
+         {% trans "Edit result" %}
+    </btn>
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    {% if can_admin %}
+        <script>
+        $(document).ready(function(){
+            $("#er_modal_body").load("{% url 'edit_results' submission.submission.id %}");
+        });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block extra %}
+<div class="modal" tabindex="-1" role="dialog" id="er_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="er_modal_body">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

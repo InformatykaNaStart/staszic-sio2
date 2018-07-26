@@ -1,0 +1,28 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block main-content %}
+{% load i18n %}
+
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="/">SIO2</a></li>
+        <li><a href={% url "archive-home" %}>Archive</a></li>
+        {% if old_contest.sio2dead %}
+            <li><a href={% url "archive-home" %}>sio2-dead</a></li>
+        {% endif %}
+        <li><a href={% url "archive-problems" old_contest.short_name %}>{{ old_contest.name }}</a></li>
+        <li><a href={% url "archive-problems" old_contest.short_name %}>Problems</a></li>
+        <li><a href="#"><strong>{{problem.name}}</strong></a></li>
+    </ol>
+    
+    {{ content }}
+        
+{% endblock %}

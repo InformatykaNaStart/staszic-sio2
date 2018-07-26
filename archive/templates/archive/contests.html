@@ -1,0 +1,177 @@
+{% extends "base-with-menu.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Archive" %}{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+{% endblock %}
+
+{% block scripts %}
+ {{ block.super }}
+ {% if modal %}
+ <script>
+$( document ).ready(
+function() 
+{
+    $("#loginModal").modal() 
+});
+
+ </script>
+ {% endif %}
+ {% endblock %}
+
+{% block main-content %}
+{% load i18n %}
+<div class="container">
+
+    <ol class="breadcrumb">
+        <li><a href="/">SIO2</a></li>
+        <li><a href={% url "archive-home" %}>{%trans "Archive" %}</a></li>
+    </ol>
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>{%trans "Connected sio2-old account" %}</strong></div>
+        <div class="panel-body">
+            {% if who %}
+            {%trans "Currently connected to" %}
+            <strong>
+            {{ who.username }}
+            </strong>
+            
+            <a style="margin-left:2ex" data-toggle="modal" href="#loginModal">{%trans "Change"%}</a>
+            {% else %}
+            {%trans "No account is connected."%} <a data-toggle="modal" href="#loginModal">{%trans "Connect" %}</a>
+            {% endif %}
+        </div>
+    </div>
+
+
+    <div class="modal fade" tabindex=-1 id="loginModal">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-body">
+
+                    <form action="{%url "archive-home" %}" method="post">
+                        {% csrf_token %}
+                        <div class="input-group" style="width: 90%; margin: 0 auto; margin-bottom:1.5ex; margin-top:1ex; text-align:center;">
+                            
+                        </div>
+                        <div class="input-group" style="width: 90%; margin: 0 auto; margin-bottom:0.5ex">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-user"></span></div>
+                            {{ form.username }}
+                        </div>
+                        <div class="input-group" style="width: 90%; margin: 0 auto; margin-bottom:1.5ex">
+                            <div class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></div>
+                            {{ form.password }}
+                        </div>
+                        <div class="input-group" style="width: 90%; margin: 0 auto; margin-bottom:0.5ex">
+                            <input type="submit" value="{%trans "Login"%}" style="width:100%; margin-bottom:0.5ex" />
+                        </div>
+                        <div class="input-group" style="width: 90%; margin: 0 auto; margin-bottom:0.5ex; height: 3ex; text-align:center;">
+                            {% for err in form.non_field_errors %}
+                                <strong style="color:#FF4D4D">
+                                    <i class="glyphicon glyphicon-remove-circle" style="color:#FF4D4D; margin-right:1ex"></i>{{ err }}
+                                </strong>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    {% if who %}
+    <div class="panel panel-default">
+    
+        <div class="panel-heading">
+            <a data-toggle="collapse" href="#sio2old" aria-expanded="false" aria-controls="sio2old" style="text-decoration:inherit; color:inherit">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <strong>{%trans "Contests (sio2-old)"%}</strong>
+                        </td>
+                        <td style="text-align:right">
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </td>
+                    </tr>
+                </table>
+            </a>
+        </div>
+        
+        <div class="collapse" id="sio2old">
+        <table class="table">
+            {% for record in contests %}
+                <tr>
+                    <td style="width:30%; vertical-align:middle">
+                        {{record.name}}
+                    </td>
+                    <td style="text-align:right">
+                        {% if record.short_name in perms %}
+                            <div class="btn-group"  style="margin-right:2ex">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {%trans "Submissions"%}
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href={% url "archive-submissions" record.short_name %}>{%trans "My submissions"%}</a></li>
+                                    <li><a href={% url "archive-submissions-all" record.short_name %}>{%trans "All submissions"%}</a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                                <a type="button"  style="margin-right:2ex" class="btn btn-default" href={% url "archive-submissions" record.short_name %}>
+                                    {%trans "Submissions"%}
+                                </a>
+                            </div>                       
+                        {% endif %}
+                        <a type="button" type="button" class="btn btn-default" style="margin-right:2ex" href="{% url "archive-problems" record.short_name %}">
+                                {%trans "Problems"%}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if request.user.is_superuser and who %}
+    <div class="panel panel-default">
+
+        <div class="panel-heading">
+            <a data-toggle="collapse" href="#sio2dead" aria-expanded="false" aria-controls="sio2dead" style="text-decoration:inherit; color:inherit">
+                <table style="width:100%">
+                    <tr>
+                        <td>
+                            <strong>{%trans "Contests (sio2-dead)"%}</strong>
+                        </td>
+                        <td style="text-align:right">
+                            <span class="glyphicon glyphicon-menu-down"></span>
+                        </td>
+                    </tr>
+                </table>
+            </a>
+        </div>
+        
+        <div class="collapse" id="sio2dead">
+        <table class="table">
+            {% for record in sio2dead_contests %}
+                <tr>
+                    <td style="width:30%; vertical-align:middle">
+                        {{record.name}}
+                    </td>
+                    <td style="text-align:right">
+                        <a type="button" type="button" class="btn btn-default" style="margin-right:2ex" href="{% url "archive-sio2dead-problems" record.short_name %}">
+                                {% trans "Problems" %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+        
+{% endblock %}

@@ -1,0 +1,122 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+
+{% block title %}Blog{% endblock %}
+
+{% block main-content %}
+{% load i18n %}
+
+<div class="container">
+	<div class="row panel panel-success cont">
+		<div class="panel-heading">
+			<h4 class="infobox">Nowości</h4>
+		</div>
+		<div class="panel-body">
+			<div class="container raw">
+				<div class="row">
+					<div class="infobox col-sm-6">
+						<h4 class="infobox">Python</h4>
+						<p class="infobox">
+							Administratorzy konkursów mogą
+							zezwolić na wysyłanie rozwiązań w Pythonie.
+							Korzystamy z Pythona w wersji <span style="font-family:monospace">3.6.5</span>. Limity
+							czasowe są identyczne dla wszystkich języków
+							programowania.
+						</p>
+					</div>
+					<div class="infobox col-sm-6">
+						<h4 class="infobox">Sprawdzaczka</h4>
+						<p class="infobox">
+							Zastąpiliśmy starego dobrego 
+							<span style="font-family:monospace">oitimetool</span>'a
+							nową sprawdzaczką opartą o rozwiązania stosowane na IOI.
+							Jest ona bezpieczniejsza, a sprawdzanie przebiega zauważalnie szybciej.
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="infobox col-sm-6">
+						<h4 class="infobox">Konta szkolne</h4>
+						<p class="infobox">
+							Uczniowie XIV LO mogą korzystać z kont szkolnych 
+							przy logowaniu na SIO2.
+							Wciąż dostępna jest możliwość założenia zwykłego konta 
+							<s>bez żadnych ograniczeń</s> po potwierdzeniu, że nie jest
+							się robotem.
+						</p>
+					</div>
+					<div class="infobox col-sm-6">
+						<h4 class="infobox">Konkursy wirtualne</h4>
+						<p class="infobox">
+							Wprowadziliśmy możliwość tworzenia konkursów, w których każdy użytkownik
+							będzie mógł wziąć udział w dogodnej dla niego porze, mając określony limit
+							czasu na rozwiązanie zadań.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="row panel panel-info cont">
+		<div class="panel-heading">
+			<h4 class="infobox">FAQ</h4>
+		</div>
+		<div class="panel-body">
+			<div class="container raw">
+				<div class="row">
+					<div class="infobox col-sm-4">
+						<h4 class="infobox">Gdzie moje dane?</h4>
+						<p class="infobox">
+							Uczestnicy konkursów mogą uzyskać dostęp do treści zadań i swoich zgłoszeń
+							poprzez zakładkę "Archiwum". Administratorzy konkursów mają dodatkowo dostęp
+							do paczek zadań oraz zgłoszeń wszystkich uczestników.
+						</p>
+					</div>
+					<div class="infobox col-sm-4">
+						<h4 class="infobox">Czemu nie przenieśliście konkursów?</h4>
+						<p class="infobox">
+							Ze względu na liczne różnice między starym SIO2 Staszica a aktualną wersją
+							SIO2 Olimpiady, którego nasz system jest pochodną, niemożliwe było zachowanie
+							wstecznej kompatybilności. Z tego powodu zdecydowaliśmy się na bezpieczniejszą opcję
+							udostępnienia danych tylko do odczytu.
+						</p>
+					</div>
+					<div class="infobox col-sm-4">
+						<h4 class="infobox">Zauważyłem błąd!</h4>
+						<p class="infobox">
+							Cóż, bardzo możliwe. Jeżeli chcesz pomóc nam go wyeliminować, napisz
+							maila, w którym opiszesz, na czym ten błąd polega
+							i jak możemy go odtworzyć u siebie.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<style>
+	h4.infobox
+	{
+		text-align:center;
+		font-weight:bold;
+	}
+	h2.infobox
+	{
+		text-align:center;
+		font-weight:bold;
+	}
+	p.infobox
+	{
+		text-align:justify;
+	}
+	div.infobox
+	{
+		padding:1.5em;
+	}
+	div.raw
+	{
+		margin:0px;
+		width:100%;
+	}
+</style>
+{% endblock %}
