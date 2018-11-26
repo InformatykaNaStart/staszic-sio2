@@ -3,6 +3,8 @@ from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
 from django.template.loader import render_to_string
 from utils import stacked_inline_for
 from models import TableRendererConfig, SummaryRankingConfig
+from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest
+from ranking_scores import fancy_score
 import math
 
 class SummaryMixin(object):
@@ -28,7 +30,7 @@ class SummaryMixin(object):
         return result
 
     def summarize_row(self, row):
-        score_sum = sum(x.score for x in row['scores'] if x is not None)
+        score_sum = fancy_score(sum(x.score for x in row['scores'] if x is not None))
         row['sum'] = score_sum
 
     def prepare_render(self, request, ranking_data):
@@ -80,7 +82,8 @@ class TableRenderer(RankingRendererBase):
         return render_to_string('rankings/table.html', request=request, context=dict(
             data = ranking_data,
             #debug = pprint.pformat(ranking_data),
-            medals = self.get_medals(ranking_data)
+            medals = self.get_medals(ranking_data),
+            can_admin = can_admin_contest(request.user, request.contest)
         ))
 
     @classmethod

@@ -17,15 +17,30 @@ class RankingScoreBase(RegisteredSubclassesBase, ObjectWithMixins):
     def css_classes(self):
         return ''
 
+def fancy_score(score):
+    if isinstance(score, int):
+        return score
+    if score.is_integer(): return int(score)
+    else: return score
+
+
 class SingleScore(RankingScoreBase):
-    score_template = Engine.get_default().from_string('<a href="{% url "submission" submission.pk %}">{{ score }}</a>')
+    score_template_active = Engine.get_default().from_string('<a href="{% url "submission" submission.pk %}">{{ score }}</a>')
+    score_template_inactive = Engine.get_default().from_string('{{ score }}')
 
     def __init__(self, user, submission, score):
         super(SingleScore, self).__init__(user, score)
         self.submission = submission
 
+    def render_score_from(self, template):
+        return template.render(Context(dict(submission=self.submission, score=fancy_score(self.score))))
+
     def render_score(self):
-        return self.score_template.render(Context(dict(submission=self.submission, score=self.score)))
+        return self.render_score_from(self.score_template_inactive)
+
+    def render_score_active(self):
+        return self.render_score_from(self.score_template_active)
+
 
     def __repr__(self):
         return u'<SingleScore user={} score={} submission={}>'.format(self.user, self.score, self.submission.pk)
@@ -72,3 +87,5 @@ class CombinedScore(RankingScoreBase):
             for name, score, coef in self.subscores
         )
         return self.template.render(Context(dict(score=self.score, tooltip=mark_safe(tooltip))))
+
+    render_score_active = render_score

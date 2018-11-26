@@ -1,0 +1,35 @@
+<div class="acl_ruleset">
+	<div class="config" hidden>{{ config }}</div>
+	<h1>ACL editor v0.1</h1>
+	<h2>Rules</h2>
+	<div class="config_area">
+
+	</div>
+	<div class="add_rule">
+		<h3>Add new rule (at the bottom)</h3>
+		<p>Rule type: <select></select><button>Add rule</button></p>
+	</div>
+	<div hidden class="base_widget">
+	{{ base_widget }}
+	</div>
+	<div hidden class="widgets">
+		
+		<div class="rule">
+			<p>
+			<span class="id"></span>.
+			<span class="form"></span>
+			<strong>action:</strong><select class="action" data-name="action">
+				<option value="ACCEPT">Grant</option>
+				<option value="REJECT" selected>Reject</option>
+				<option value="DEFAULT">Do default</option>
+				<option value="GOTO">Goto rule</option>
+			</select>
+			<input class="goto_label" data-name="goto_label" hidden maxlength="2" style="width: 2em">
+			[<button class="up">up</button>
+			<button class="down">down</button>
+			<button class="del">del</button>]
+			</p>
+		</div>
+
+	</div>
+</div>

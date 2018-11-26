@@ -1,0 +1,24 @@
+{% extends "base-with-menu.html" %}
+{% load i18n %}
+
+{% block styles %}
+{{ block.super }}
+<style type="text/css">
+    {{ css|safe }}
+</style>
+{% endblock %}
+
+{% block title %}
+{% blocktrans %}Model solution for {{ problem }}{% endblocktrans %}
+{% endblock %}
+
+{% block main-content %}
+    {% if decode_error %}
+        {% include "programs/file_decoding_error.html" %}
+    {% endif %}
+    {% if is_source_safe %}
+        <div class="h-scrollable">{{ source|safe }}</div>
+    {% else %}
+        <pre>{{ source }}</pre>
+    {% endif %}
+{% endblock %}

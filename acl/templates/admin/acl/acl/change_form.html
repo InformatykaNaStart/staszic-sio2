@@ -1,0 +1,10 @@
+{% extends "admin/change_form.html" %}
+
+{% block submit_buttons_bottom %}
+{% if original %}
+<div class="submit-row">
+	<a class="btn" href="{% url "oioioiadmin:acl_hook" original.pk %}">Add hook</a>
+</div>
+{% endif %}
+{{ block.super }}
+{% endblock %}

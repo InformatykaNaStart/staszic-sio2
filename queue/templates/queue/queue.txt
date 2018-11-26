@@ -1,0 +1,6 @@
+{% for name, queues in qs %}--- {{ name }} ---
+{% for contest, tasks in queues %}Contest: {{ contest }}
+{% for task in tasks %} {{task.id}}: {{task.env.job_type}}{% if task.env.job_type == "vcpu-exec" %}{{task.env.name}} @ {{task.env.exe_file}}{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}

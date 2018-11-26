@@ -1,0 +1,16 @@
+{% extends "programs/submission_header.html" %}
+{% load i18n %}
+
+{% block user_buttons %}
+    {{block.super}}
+    {% if submission.submission.score == 100 and submission.submission.problem_instance.show_model %}
+        <a class="btn btn-default btn-sm" role="button" href="/s/{{submission.submission.problem_instance.problem.id}}/{{submission.submission.id}}/model">
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+            {% trans "Show solution" %}
+        </a>
+    {% endif %}
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+{% endblock %}

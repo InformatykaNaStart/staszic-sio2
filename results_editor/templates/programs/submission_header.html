@@ -3,10 +3,10 @@
 
 {% block admin_buttons %}
     {{block.super}}
-    <btn class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#er_modal">
+    <button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#er_modal">
          <span class="glyphicon glyphicon-pencil"></span>
          {% trans "Edit result" %}
-    </btn>
+    </button>
 {% endblock %}
 
 {% block styles %}
@@ -25,6 +25,7 @@
 {% endblock %}
 
 {% block extra %}
+{{ block.super }}
 <div class="modal" tabindex="-1" role="dialog" id="er_modal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">

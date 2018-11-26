@@ -44,7 +44,7 @@
                     <tr>
                         <td> {{record.date}} </td>
                         {% if all_submissions %}
-                            <td>{{record.author.username}}</td>
+                            <td>{{record.author.first_name}} {{record.author.last_name}} ({{record.author.username}})</td>
                         {% endif %}
                         <td>{{ record.problem_instance.problem.name }} ({{ record.problem_instance.problem.short_name }})</td>
                         <td class="submission--{{ record.status }}" style="text-align:center">

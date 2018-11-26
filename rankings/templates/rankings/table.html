@@ -1,10 +1,11 @@
 {% load ranking_scores static simple_filters %}
+{% load i18n %}
 
-<table class="ranking">
+<table class="ranking table-hover">
 	<thead>
 		<tr>
-			<th>Pos.</th>
-			<th>Competitor</th>
+			<th>#</th>
+			<th>{% trans "User" %}</th>
 			
 			{% for column in data.columns %}
 				<th>{{ column.render_header }}</th>
@@ -18,18 +19,35 @@
 
 	<tbody>
 		{% for row, medal in data.data|zip:medals %}
-		<tr class="{{medal}}">
-			<td class="place">{{ row.place }}</td>
-			<td class="full_name">{{ row.user.get_full_name }}</td>
+		<tr class="{{medal}}" style="border-top:1px solid #cccccc">
+			<td class="r place">{{ row.place }}.</td>
+			<td class="r full_name" style="text-align:center;">{{ row.user.get_full_name }}</td>
 
 			{% for score in row.scores %}
-				<td class="score{{ score|score_classes }}">{{ score|render_score }}</td>
+                {% if score.user == user or can_admin %}
+				    <td class="r score{{ score|score_classes }}">{{ score.render_score_active }}</td>
+                {% else %}
+                    <td class="r score{{ score|score_classes }}">{{ score.render_score }}</td>
+                {% endif %}
 			{% endfor %}
 
 			{% for f in data.row_summary %}
-				<td class="row_summary">{{ f|call_summary:row }}</td>
+				<td class="r row_summary">{{ f|call_summary:row }}</td>
 			{% endfor %}
 		</tr>
 		{% endfor %}
 	</tbody>
 </table>
+
+<style>
+    td.r
+    {
+        padding: 0.5em;
+        padding-left:1em; padding-right:1em;    
+    }
+    td.row_summary
+    {
+        font-weight:bold;
+    }
+</style>
+

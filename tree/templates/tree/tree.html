@@ -1,0 +1,43 @@
+{% extends "simple-centered.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Select contest' %}{% endblock %}
+
+{% block content %}
+
+<h1>{% trans 'Select contest' %}</h1>
+
+<script>
+function install_toggle() {
+    $('.toggle-cg').click(function(ev) {
+        let x = $(ev.target).data('cg');
+        $('.cg-' + x).toggle();
+    });
+}
+
+$(document).ready(install_toggle);
+</script>
+
+<table class="table">
+    <thead>
+        <tr><th style="width: 100px">{% trans "ID" %}</th><th>{% trans "Name" %}</th></tr>
+    </thead>
+    <tbody>
+        {% for group,contests in to_show %}
+        <tr>
+            <td colspan="2" style="text-align: center; font-weight:bold">
+                <a href="#" class="toggle-cg" data-cg="{{group.pk}}">{{group.name}}</a>
+            </td>
+        </tr>
+        {% for contest in contests %}
+        <tr class="cg-{{group.pk}}" style="display: none">
+            <td>{{ contest.id }}</td>
+            <td><a href="{% url 'default_contest_view' contest_id=contest.id %}">{{ contest.name }}</a></td>
+        </tr>
+        {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+

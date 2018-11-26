@@ -19,17 +19,26 @@ def make_submission_filename(instance, filename):
 class StaszicOldUser(models.Model):
     parent = models.ForeignKey(User, default=None, blank=True, null=True)
     username = models.CharField(max_length=512)
+    first_name = models.CharField(max_length=512)
+    last_name = models.CharField(max_length=512)
     password = models.CharField(max_length=512)
     is_superuser = models.BooleanField(default=False)
-
+    def __unicode__(self):
+        return self.username
+    def __lt__(self, other):
+        return self.username < other.username
 class StaszicOldContest(models.Model):
     short_name = models.CharField(max_length=512, default=None, blank=True, null=True)
     name = models.CharField(max_length=512)
     sio2dead = models.BooleanField(default=False)
+    def __unicode__(self):
+        return self.name
 
 class StaszicOldContestAdminPermission(models.Model):
     contest = models.ForeignKey(StaszicOldContest)
     user = models.ForeignKey(StaszicOldUser)
+    def __unicode__(self):
+        return self.contest.short_name + ': ' + self.user.username
 
 class StaszicOldProblem(models.Model):
     problem_id = models.IntegerField(default=0)
@@ -43,6 +52,7 @@ class StaszicOldProblemInstance(models.Model):
     problem = models.ForeignKey(StaszicOldProblem, default=None, blank=True, null=True)
     contest = models.ForeignKey(StaszicOldContest, default=None, blank=True, null=True)
     round = models.CharField(max_length=512)
+    piid = models.IntegerField(default=None, blank=True, null=True)
 
 class StaszicOldSubmission(models.Model):
     submission_id = models.IntegerField(default=0)

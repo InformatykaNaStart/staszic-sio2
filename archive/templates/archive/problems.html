@@ -32,18 +32,22 @@
             <tbody>
                 {% for p in problems %}
                     <tr>
- 
+                        {% if old_contest.sio2dead == False %}
+                        <td style="vertical-align:middle;">
+                            {{p.round}}
+                        </td>
+                        {% endif %}
                         <td style="vertical-align:middle; padding-left:1.5em">
                             <a href={% url "archive-statement" old_contest.short_name p.problem.problem_id %}> {{p.problem.name}} </a>
                         </td>
+                        {% if is_admin %}
                         <td style="text-align:right">
                             <a type="button" type="button" class="btn btn-default" style="margin-right:2ex" 
                             href={% url "archive-package" p.problem.problem_id %}>
-
                                     {%trans "Download package"%}
                             </a>
                         </td>
- 
+                        {% endif %}
                     </tr>
                 {% endfor %}
             </tbody>

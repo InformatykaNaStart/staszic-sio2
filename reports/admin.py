@@ -2,7 +2,7 @@ from django.contrib import admin
 from models import ReportConfig
 from oioioi.contests.admin import ContestAdmin
 
-class ReportConfigInline(admin.TabularInline):
+class ReportConfigInline(admin.StackedInline):
     model = ReportConfig
     can_delete = False
     extra = 1

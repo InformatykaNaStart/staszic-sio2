@@ -1,12 +1,48 @@
-{% extends "base-with-menu.html" %}
+{% extends "base.html" %}
 {% load static compress %}
 
 {% block title %}Blog{% endblock %}
 
-{% block main-content %}
+{% block body %}
 {% load i18n %}
 
 <div class="container">
+<!--    <div style="text-align:center; padding:3ex; " class="row">
+    <img src="https://preview.ibb.co/cEM2DU/spr.jpg" alt="spr" border="0" style="width:40ex">
+    </div>
+    <div class="row panel panel-danger cont">
+        <div class="panel-heading">
+            <h4 class="infobox">Powrót do Warszawy</h4>
+        </div>
+        <div class="panel-body">
+            <div class="container raw">
+                <div class="row">
+                    <div class="infobox col-sm-12">
+<h3>Przed wyjazdem do Warszawy</h3>
+    <ol>
+        <li>Wynosimy wszystkie śmieci do kontenera</li>
+        <li>Prześcieradło, poszwy na poduszkę i na kołdrę znosimy na dół i kładziemy na ławeczce przy recepcji internatu (kołdrę i poduszkę zostawiamy w pokoju na  łóżku)</li>
+        <li>Uczestnicy, którzy nie wracają z grupą autokarem zobowiązani są do dostarczenia wychowawcy oświadczenia o samodzielnym opuszczeniu obozu do dnia 29.08.2018r.
+        <ul>
+            <li>Osoby pełnoletnie podpisują oświadczenie własnoręcznie</li>
+            <li>Osoby niepełnoletnie - oświadczenie podpisuje opiekun prawny</li>
+        </ul>
+    </ol>
+<h3><strong>Wyjazd autokarów o godzinie 16:00</strong></h3>
+<h3>Po przyjeździe do Warszawy</h3>
+    <ol>
+        <li>Każdy uczestnik żegna się ze swoim wychowawcą</li>
+        <li>Po pożegnaniu uczestnik pełnoletni może oddalić się samodzielnie</li>
+        <li>Uczestnik niepełnoletni odchodzi z rodzicem/opiekunem, lub sam za wcześniejszym okazaniem wychowawcy pozwolenia opiekuna</li>
+    </ol>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+
 	<div class="row panel panel-success cont">
 		<div class="panel-heading">
 			<h4 class="infobox">Nowości</h4>
@@ -14,7 +50,7 @@
 		<div class="panel-body">
 			<div class="container raw">
 				<div class="row">
-					<div class="infobox col-sm-6">
+					<div class="infobox col-sm-4">
 						<h4 class="infobox">Python</h4>
 						<p class="infobox">
 							Administratorzy konkursów mogą
@@ -24,7 +60,7 @@
 							programowania.
 						</p>
 					</div>
-					<div class="infobox col-sm-6">
+					<div class="infobox col-sm-4">
 						<h4 class="infobox">Sprawdzaczka</h4>
 						<p class="infobox">
 							Zastąpiliśmy starego dobrego 
@@ -33,9 +69,9 @@
 							Jest ona bezpieczniejsza, a sprawdzanie przebiega zauważalnie szybciej.
 						</p>
 					</div>
-				</div>
-				<div class="row">
-					<div class="infobox col-sm-6">
+				<!--</div>-->
+				<!--<div class="row">-->
+					<!--<div class="infobox col-sm-6">
 						<h4 class="infobox">Konta szkolne</h4>
 						<p class="infobox">
 							Uczniowie XIV LO mogą korzystać z kont szkolnych 
@@ -44,13 +80,13 @@
 							<s>bez żadnych ograniczeń</s> po potwierdzeniu, że nie jest
 							się robotem.
 						</p>
-					</div>
-					<div class="infobox col-sm-6">
-						<h4 class="infobox">Konkursy wirtualne</h4>
+					</div>-->
+					<div class="infobox col-sm-4">
+						<h4 class="infobox" style="margin-bottom:0">SmartJudge<sup>TM</sup></h4>
+						<p style="text-align: center; font-size:0.75rem;">(patent pending)</p>
 						<p class="infobox">
-							Wprowadziliśmy możliwość tworzenia konkursów, w których każdy użytkownik
-							będzie mógł wziąć udział w dogodnej dla niego porze, mając określony limit
-							czasu na rozwiązanie zadań.
+					        Sprawdzaczki pracujące w trybie SmartJudge<sup>TM</sup> będą oceniały
+                            tylko testy wpływające na wynik, co pozwoli uniknąć niepotrzebnego obciążania sprawdzaczek.
 						</p>
 					</div>
 				</div>
@@ -68,7 +104,7 @@
 						<h4 class="infobox">Gdzie moje dane?</h4>
 						<p class="infobox">
 							Uczestnicy konkursów mogą uzyskać dostęp do treści zadań i swoich zgłoszeń
-							poprzez zakładkę "Archiwum". Administratorzy konkursów mają dodatkowo dostęp
+							poprzez przycisk "Archiwum" w menu konta. Administratorzy konkursów mają dodatkowo dostęp
 							do paczek zadań oraz zgłoszeń wszystkich uczestników.
 						</p>
 					</div>
@@ -86,7 +122,8 @@
 						<p class="infobox">
 							Cóż, bardzo możliwe. Jeżeli chcesz pomóc nam go wyeliminować, napisz
 							maila, w którym opiszesz, na czym ten błąd polega
-							i jak możemy go odtworzyć u siebie.
+							i jak możemy go odtworzyć u siebie. Nasz mail to:
+                            <a href="mailto:sio2@staszic.waw.pl" style="font-family:monospace">sio2@staszic.waw.pl</a>
 						</p>
 					</div>
 				</div>

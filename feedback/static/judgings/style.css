@@ -1,0 +1,31 @@
+div.judging table {
+	margin: auto;
+	width: 400px;
+	table-layout: fixed;
+	border-collapse: collapse;
+}
+div.judging td, div.judging th {
+	text-align: center;
+	padding: 2px 10px;
+	width: 100%;
+	border-left: 1px solid black;
+	border-top: 1px solid black;
+}
+table.judging {
+	margin-top: 5px !important;
+}
+
+div.judging td:last-child, div.judging th:last-child {
+	border-right: 1px solid black;
+}
+div.judging tr:last-child td, div.judging tr:last-child th{
+	border-bottom: 1px solid black;
+}
+
+tr.jprogress td:nth-child(1), tr.jprogress th:nth-child(1) { background-color: #bbdefb; }
+tr.jprogress td:nth-child(2), tr.jprogress th:nth-child(2) { background-color: #ffe0b2; }
+tr.jprogress td:nth-child(3), tr.jprogress th:nth-child(3) { background-color: #c8e6c9; }
+tr.compilation_QU { background-color: #bbdefb; }
+tr.compilation_CO { background-color: #ffe0b2; }
+tr.compilation_OK { background-color: #c8e6c9; }
+tr.compilation_CE { background-color: #ffcdd2; }

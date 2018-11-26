@@ -1,0 +1,8 @@
+<fieldset><legend>Set time limits based on this submission</legend>
+
+<form method="post" action="{% url "submission-set-tls" submission_id %}">
+	{% csrf_token %}
+	{% include 'ingredients/form.html' %}
+	<p><button class="btn btn-primary">Set</button></p>
+</form>
+</fieldset>

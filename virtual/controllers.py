@@ -7,6 +7,7 @@ from utils import get_current_virtual_contest
 from django.utils.safestring import mark_safe
 from django.core.urlresolvers import reverse
 from oioioi.base.permissions import enforce_condition, not_anonymous
+from staszic.new_base.controllers import ParticipantsControllerWithACL
 import datetime
 
 class HiddenRoundTimes(RoundTimes):
@@ -89,3 +90,6 @@ class VirtualContestsController(ProgrammingContestController):
             result.append((15, self.finish_contest_action(request, vcontest)))
 
         return result
+    
+    def registration_controller(self):
+        return ParticipantsControllerWithACL(self.contest)

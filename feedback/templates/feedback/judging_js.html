@@ -1,0 +1,11 @@
+<script>
+function initialize_refresh() {
+	jQuery('div.judging').each((_, elem) => {
+		function update(){
+			jQuery.ajax({ url: `/staszic/judging/${elem.dataset['jid']}/`}).done((data) => {elem.innerHTML = data; });
+		}
+		setInterval(update, 1000);
+	});
+}
+jQuery(initialize_refresh);
+</script>

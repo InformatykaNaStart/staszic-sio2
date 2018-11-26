@@ -1,7 +1,33 @@
 {% extends "base-with-menu.html" %}
 
 {% block main-content %}
-<h2>Wymagana ponowna ocena</h2>
+<fieldset><legend>Wymagana ponowna ocena</legend>
 <p>Żeby się pozbyć tego brzydkiego żądania zrobienia rejudge'u, bez robienia rejudge, użyj tego przycisku:</p>
 <p><a class="btn btn-primary" href="{% url "staszic-doesnt-need-rejudge" %}">Abrakadabra</a></p>
+</fieldset>
+
+<form action="{% url "staszic-change-statement" %}" method="post" class="form-horizontal" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset><legend>Podmiana treści zadania</legend>
+        <p><strong>Uwaga!</strong> Ta opcja nie podmienia treści w paczce! Proszę używać tej opcji tylko w razie nagłej potrzeby
+        podmiany treści bez rejudge'u rozwiązań wzorcowych.</p>
+        {% include 'ingredients/form.html' with form=change_statement_form %}
+        <div id="form-actions">
+        <p><button class="btn btn-primary">Podmień</button></p>
+        </div>
+    </fieldset>
+</form>
+
+<form action="{% url "staszic-sub-limit" %}" method="post" class="form-horizontal" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset><legend>Zmiania limitów zgłoszeń</legend>
+        {% include 'ingredients/form.html' with form=change_limit_form %}
+        <div id="form-actions">
+        <p><button class="btn btn-primary">Zmień</button></p>
+        </div>
+    </fieldset>
+</form>
+
+
 {% endblock %}
+

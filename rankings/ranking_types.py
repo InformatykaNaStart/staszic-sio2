@@ -1,9 +1,9 @@
 # coding: utf-8
 from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
-from oioioi.contests.models import ProblemInstance
-from utils import stacked_inline_for
+from oioioi.contests.models import ProblemInstance, Round
+from utils import stacked_inline_for, tabular_inline_for
 from ranking_columns import ProblemInstanceColumn
-from models import RoundRankingConfig
+from models import RoundRankingConfig, AdvancedRankingConfig
 
 class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
     modules_with_subclasses = ['ranking_types']
@@ -12,6 +12,7 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
     def __init__(self, ranking):
         self.ranking = ranking
         self.contest = ranking.contest
+        self.request = 23
 
     def get_columns(self):
         raise NotImplementedError
@@ -20,10 +21,14 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
     def get_admin_inlines(cls):
         return []
 
-    def calculate_data(self):
+    def calculate_data(self, request = None):
         data = []
         umap = {}
-        columns = self.get_columns()
+        if request is None:
+            columns = self.get_columns()
+        else:
+            columns = self.get_columns(request)
+
         ncolumns = len(columns)
 
         for i, column in enumerate(columns):
@@ -38,12 +43,11 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
                     row = umap[k]
 
                 row['scores'][i] = v
-        
+
         ranking = dict(
                 columns = columns,
                 data = data,
         )
-
         return ranking
 
     def finalize_ranking(self, request, ranking_data):
@@ -62,6 +66,7 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
             return [piece for piece, sel in zip(data, selector) if sel]
 
         ranking_data['columns'] = select(ranking_data['columns'], selector)
+
         new_scores = []
         for row in ranking_data['data']:
             row['scores'] = select(row['scores'], selector)
@@ -95,8 +100,40 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
             row['place'] = curr_place
         return ranking_data
 
+    @classmethod
+    def is_valid_for_contest(self, contest_controller):
+        return True
+
+class AdvancedRanking:
+    description = 'Dont-use-it ranking'
+    type_id = 'hugo_ranking'
+
+    @classmethod
+    def get_admin_inlines(cls):
+        x = super(AdvancedRanking, cls).get_admin_inlines()+[stacked_inline_for(AdvancedRankingConfig, cls, dict(can_delete=True, can_add=True, min_num=0, extra=0))]
+        return x
+
+    @property
+    def config(self):
+        return AdvancedRankingConfig()
+
+    def get_columns(self):
+        result = []
+        configs = AdvancedRankingConfig.objects.filter(ranking=self.ranking)
+        for config in configs:
+                try:
+                    round = Round.objects.get(name=config.round, contest=self.contest)
+                    for problem_instance in ProblemInstance.objects.filter(round=round).order_by('short_name'):
+                        params = dict(round_coef=0, contest_coef=1, contest_type='last', round_type='last', start_date=config.start_date, end_date=config.end_date)
+                        params.update(config.dict_config)
+                        result.append(ProblemInstanceColumn(self.ranking, problem_instance, **params))
+                except IOError:
+                    pass
+        return result
+
+
 class ContestRanking(RankingTypeBase):
-    description = 'Ranking for the whole contest'
+    description = 'Ranking'
     type_id = 'contest_ranking'
 
     @classmethod
@@ -108,15 +145,22 @@ class ContestRanking(RankingTypeBase):
         if hasattr(self.ranking, 'roundrankingconfig'):
             return self.ranking.roundrankingconfig
         return RoundRankingConfig()
-    
+
     def get_columns(self):
         result = []
-
-        for problem_instance in ProblemInstance.objects.filter(round__contest=self.contest).order_by('round__start_date', 'short_name'):
-            result.append(ProblemInstanceColumn(self.ranking, problem_instance, **self.config.dict_config))
-
+        r = self.config.dict_config['round'].strip()
+        cfg = self.config.dict_config
+        cfg.pop('round', None)
+        if r == '':
+            pis = ProblemInstance.objects.filter(round__contest=self.contest).order_by('round__start_date', 'short_name')
+            if self.config.dict_config['trial_visibility']:
+                pis.filter(round__is_trial)
+            for problem_instance in pis:
+                result.append(ProblemInstanceColumn(self.ranking, problem_instance, **cfg))
+        else:
+            for problem_instance in ProblemInstance.objects.filter(round__contest=self.contest, round__name=r).order_by('round__start_date', 'short_name'):
+                result.append(ProblemInstanceColumn(self.ranking, problem_instance, **cfg))
         return result
-
 
 # komentuję, bo sypie 500 ~hugo
 

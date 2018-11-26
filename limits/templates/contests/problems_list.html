@@ -1,0 +1,31 @@
+{% extends "contests/problems_list.html" %}
+{% load i18n %}
+
+{% block cols %}4{% endblock %}
+{% block extraheaders %}<th style="text-align:center">{% trans "Submissions" %}</th>{% endblock %}
+{% block extracells %}
+    <td style="text-align:center">
+        <div id="limits_{{pi.id}}">
+        </div>
+    </td>
+{% endblock %}
+
+{% block scripts %}
+{{block.super}}
+<script type="text/javascript">
+$(document).ready(function(){
+    {% for pi, statement_visible, round_time, result in problem_instances %}
+        $("#limits_{{pi.id}}").load("{% url 'limits' pi.id %}");
+    {% endfor %}
+});
+</script>
+{%endblock%}
+
+{% block styles %}
+{{ block.super }}
+<style>
+    .limits
+    {
+    }
+</style>
+{% endblock %}

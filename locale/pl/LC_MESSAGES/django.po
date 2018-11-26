@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-09 15:25+0200\n"
+"POT-Creation-Date: 2018-11-20 14:18+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,12 +19,20 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
 
+#: archive/forms.py:5
+msgid "Username"
+msgstr "Login"
+
+#: archive/forms.py:6
+msgid "Password"
+msgstr "Hasło"
+
 #: archive/templates/archive/contests.html:4
 #: archive/templates/archive/contests.html:30
 #: archive/templates/archive/problems.html:6
 #: archive/templates/archive/problems.html:18
 #: archive/templates/archive/submissions.html:5
-#: archive/templates/archive/submissions.html:17
+#: archive/templates/archive/submissions.html:17 archive/views.py:19
 msgid "Archive"
 msgstr "Archiwum"
 
@@ -59,6 +67,7 @@ msgstr "Konkursy (Stare SIO2)"
 #: archive/templates/archive/contests.html:114
 #: archive/templates/archive/contests.html:123
 #: archive/templates/archive/submissions.html:22
+#: limits/templates/contests/problems_list.html:5
 msgid "Submissions"
 msgstr "Zgłoszenia"
 
@@ -86,7 +95,7 @@ msgstr "Konkursy (Bardzo Stare SIO2)"
 msgid "sio2-dead"
 msgstr "Bardzo Stare SIO2"
 
-#: archive/templates/archive/problems.html:43
+#: archive/templates/archive/problems.html:47
 msgid "Download package"
 msgstr "Pobierz paczkę"
 
@@ -103,17 +112,116 @@ msgid "Problem"
 msgstr "Zadanie"
 
 #: archive/templates/archive/submissions.html:37
+#: results_editor/templates/results_editor/edit.html:35
 msgid "Status"
 msgstr "Status"
 
 #: archive/templates/archive/submissions.html:38 results_editor/forms.py:6
+#: results_editor/templates/results_editor/edit.html:28
 msgid "Score"
 msgstr "Wynik"
 
-#: archive/templates/archive/submissions.html:58
+#: archive/templates/archive/submissions.html:59
 msgid "Download code"
 msgstr "Pobierz kod"
 
-#: results_editor/forms.py:9
+#: feedback/models.py:23
+msgid "Not judged"
+msgstr ""
+
+#: new_acm/templates/new_acm/acm.html:9
+#: rankings/templates/rankings/table.html:8
+msgid "User"
+msgstr "Użytkownik"
+
+#: rankings/templates/rankings/ranking.html:5
+#: rankings/templates/rankings/ranking.html:13 rankings/views.py:13
+msgid "Rankings"
+msgstr "Rankingi"
+
+#: reports/templates/programs/report-body.html:37
+msgid "Test report details"
+msgstr "Szczegóły raportu"
+
+#: reports/templates/reports/modal.html:15
+msgid "Input and output"
+msgstr "Wejście i wyjście"
+
+#: reports/templates/reports/modal.html:19
+msgid "Download output for this test"
+msgstr "Pobierz wyjście dla tego testu"
+
+#: reports/templates/reports/modal.html:21
+msgid "Output"
+msgstr "Wyjście"
+
+#: reports/templates/reports/modal.html:23
+msgid "Download input for this test"
+msgstr "Pobierz wejście dla tego testu"
+
+#: reports/templates/reports/modal.html:25
+msgid "Input"
+msgstr "Wejście"
+
+#: reports/templates/reports/modal.html:31
+msgid "Download user output for this test"
+msgstr "Pobierz wyjście użytkownika dla tego testu"
+
+#: reports/templates/reports/modal.html:32
+msgid "User output"
+msgstr "Wyjście użytkownika"
+
+#: reports/templates/reports/modal.html:35
+msgid "Processing"
+msgstr "Przetwarzanie"
+
+#: reports/templates/reports/modal.html:38
+msgid "Generate user output for this test"
+msgstr "Wygeneruj wyjście dla tego testu"
+
+#: reports/templates/reports/modal.html:39
+msgid "Generate user out"
+msgstr "Wygeneruj wyjście"
+
+#: reports/templates/reports/modal.html:53
+msgid "Isolate metadata"
+msgstr "Metadane isolate"
+
+#: reports/templates/reports/modal.html:65
+msgid "Standard error stream"
+msgstr "Strumień błędów"
+
+#: results_editor/forms.py:8
+#: results_editor/templates/results_editor/edit.html:23
 msgid "Comment"
 msgstr "Komentarz"
+
+#: results_editor/templates/programs/submission_header.html:8
+msgid "Edit result"
+msgstr "Edytuj wynik"
+
+#: showmodel/templates/programs/submission_header.html:9
+msgid "Show solution"
+msgstr "Pokaż rozwiązanie"
+
+#: showmodel/templates/showmodel/source.html:12
+#, python-format
+msgid "Model solution for %(problem)s"
+msgstr "Rozwiązanie wzorcowe dla %(problem)s"
+
+#: timelimits/templates/programs/submission_header.html:8
+msgid "Set time limits"
+msgstr ""
+
+#: tree/templates/tree.html:4 tree/templates/tree.html:8
+#: tree/templates/tree/tree.html:4 tree/templates/tree/tree.html:8
+msgid "Select contest"
+msgstr ""
+
+#: tree/templates/tree.html:23 tree/templates/tree/tree.html:23
+msgid "ID"
+msgstr ""
+
+#: tree/templates/tree.html:23 tree/templates/tree/tree.html:23
+msgid "Name"
+msgstr ""

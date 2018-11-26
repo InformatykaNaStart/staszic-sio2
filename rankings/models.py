@@ -3,7 +3,8 @@ from __future__ import unicode_literals
 from django.db import models
 from oioioi.base.fields import DottedNameField
 from django.utils.module_loading import import_string
-
+from oioioi.contests.models import Round
+from utils import stacked_inline_for
 # Create your models here.
 
 class StaszicRanking(models.Model):
@@ -39,23 +40,40 @@ COLUMN_VISIBILITY_TYPES = [
 class RoundRankingConfig(models.Model):
     ranking = models.OneToOneField(StaszicRanking)
 
-    round_coef = models.IntegerField(default=1)
-    round_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, default='last')
-    contest_coef = models.IntegerField(default=0)
-    contest_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, default='best')
+    round = models.CharField(verbose_name='Round name (empty for all rounds)', max_length=256, blank=True, default='')
+    round_coef = models.IntegerField(default=1, verbose_name="Contest coefficient")
+    round_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, default='last', verbose_name='Contest scoring type')
+    contest_coef = models.IntegerField(default=0, verbose_name='All-time coefficient')
+    contest_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, verbose_name='All-time scoring type', default='best')
 
     column_visibility = models.CharField(max_length=8, choices=COLUMN_VISIBILITY_TYPES, default='end')
+    trial_visibility = models.BooleanField(default=False, verbose_name='Trial round visibility')
 
     @property
     def dict_config(self):
         return dict(
+            round = self.round,
             round_coef = self.round_coef,
             round_type = self.round_type,
             contest_coef = self.contest_coef,
             contest_type = self.contest_type,
             visibility_type = self.column_visibility,
+            trial_visibility = self.trial_visibility,
             )
+
+class AdvancedRankingConfig(models.Model):
+    ranking = models.ForeignKey(StaszicRanking)
+    round = models.CharField(verbose_name='Round name', max_length=256)
+    start_date = models.DateTimeField(verbose_name='Ignore submissions before')
+    end_date = models.DateTimeField(verbose_name='Ignore submissions after')
+    column_visibility = models.CharField(max_length=8, choices=COLUMN_VISIBILITY_TYPES, default='end')
     
+    @property
+    def dict_config(self):
+        return dict(
+            visibility_type = self.column_visibility,
+            )
+
 class SummaryRankingConfig(models.Model):
     ranking = models.OneToOneField(StaszicRanking)
 

@@ -5,6 +5,12 @@ table.ranking {
 	text-align: left;
 }	
 
+table.ranking thead tr {
+	position: sticky;
+	top: 55px;
+	background-color: white;
+}
+
 table.ranking tr {
 	height: 4ex;
 }

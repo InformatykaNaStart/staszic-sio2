@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import render, get_object_or_404
 from oioioi.base.permissions import not_anonymous, make_condition, enforce_condition
-from oioioi.base.menu import menu_registry
+from oioioi.base.menu import menu_registry, account_menu_registry
 #from django.contrib.auth import AnonymousUser
 from oioioi.contests.utils import can_enter_contest, contest_exists #, is_superuser
 from django.core.urlresolvers import reverse
@@ -16,9 +16,12 @@ from StringIO import StringIO
 import mimetypes
 from django.utils.safestring import mark_safe
 
-@menu_registry.register_decorator(_("Archive"),
-        lambda request: reverse('archive-home'),
-        order=0, condition=not_anonymous)
+@account_menu_registry.register_decorator(_("Archive"),
+        lambda request: reverse('archive-home'), order=0)
+
+#@menu_registry.register_decorator(_("Archive"),
+#        lambda request: reverse('archive-home'),
+#        order=0, condition=not_anonymous)
 
 
 def is_oldcontest_admin(request, who, contest):
@@ -26,7 +29,7 @@ def is_oldcontest_admin(request, who, contest):
         return True
     permissions = [p.contest.short_name for p in StaszicOldContestAdminPermission.objects.filter(user=who)]
     if getattr(who, 'is_superuser', False):
-        permissions = [c.short_name for c in StaszicOldContest.objects.filter()]    
+        permissions = [c.short_name for c in StaszicOldContest.objects.filter()]
     if contest.short_name in permissions: return True
     else: return False
 
@@ -41,7 +44,7 @@ def is_oldproblem_admin(request, who, problem):
     if request.user.is_superuser:
         return True
     for pi in StaszicOldProblemInstance.objects.filter(problem=problem):
-        if is_oldcontest_admin(pi.contest): return True
+        if pi.contest and is_oldcontest_admin(request, who, pi.contest): return True
     return False
     
     
@@ -49,7 +52,7 @@ def can_see_oldproblem(request, who, problem):
     if is_oldproblem_admin(request, who, problem):
         return True
     for pi in StaszicOldProblemInstance.objects.filter(problem=problem):
-        if is_oldcontest_participant(pi.contest): return True
+        if pi.contest and is_oldcontest_participant(request, who, pi.contest): return True
     return False
 
 
@@ -160,11 +163,12 @@ def problems_view(request, contest_id=None):
     contest = get_object_or_404(StaszicOldContest, short_name=contest_id)
     if not is_oldcontest_participant(request, who, contest):
         return HttpResponseForbidden()    
-    problems = StaszicOldProblemInstance.objects.filter(contest=contest)
+    problems = StaszicOldProblemInstance.objects.filter(contest=contest).order_by('round')
     
     return render(request, 'archive/problems.html', {
         'problems': problems,
-        'old_contest': contest
+        'old_contest': contest,
+        'is_admin': is_oldcontest_admin(request, who, contest)
         })
 
 
@@ -180,7 +184,8 @@ def problems_sio2dead_view(request, contest_id=None):
     
     return render(request, 'archive/problems.html', {
         'problems': problems,
-        'old_contest': contest
+        'old_contest': contest,
+        'is_admin': True
         })
 
 
@@ -195,7 +200,7 @@ def download_package_view(request, pid):
     p = get_object_or_404(StaszicOldProblem, problem_id=pid)
     who = get_object_or_404(StaszicOldUser, parent=request.user)
     
-    if not is_oldproblem_admin(request, who, pid):
+    if not is_oldproblem_admin(request, who, p):
         return HttpResponseForbidden()
         
     return stream_file(p.package, problem_package_name(p))
@@ -210,10 +215,9 @@ def problem_statement_name(problem):
     
 def zip_view(request, contest, pid, path):
     who = get_object_or_404(StaszicOldUser, parent=request.user)
-    if not can_see_oldproblem(request, who, pid):
-        return HttpResponseForbidden()
-        
     p = get_object_or_404(StaszicOldProblem, problem_id=pid)
+    if not can_see_oldproblem(request, who, p):
+        return HttpResponseForbidden()
 
     fp = StringIO(p.statement.read())
     zip = zipfile.ZipFile(fp)
@@ -230,10 +234,10 @@ def zip_view(request, contest, pid, path):
 
 def statement_view(request, contest, pid):
     who = get_object_or_404(StaszicOldUser, parent=request.user)
-    if not can_see_oldproblem(request, who, pid):
+    p = get_object_or_404(StaszicOldProblem, problem_id=pid)   
+    if not can_see_oldproblem(request, who, p):
         return HttpResponseForbidden()
             
-    p = get_object_or_404(StaszicOldProblem, problem_id=pid)   
     c = get_object_or_404(StaszicOldContest, short_name=contest)
     
     if p.statement.name.endswith('.zip'):          

@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.forms.models import modelform_factory
-from forms import RankingAddForm
+from forms import RankingAddFormFactory
 from models import StaszicRanking
 from oioioi.base import admin
 from oioioi.contests.admin import contest_site
@@ -46,7 +46,7 @@ class RankingAdmin(admin.ModelAdmin):
         defaults = {}
 
         if obj is None:
-            defaults['form'] = RankingAddForm
+            defaults['form'] = RankingAddFormFactory(request.contest)
             defaults['fields'] = ['name', 'type_name', 'renderer_name']
         defaults.update(kwargs)
 

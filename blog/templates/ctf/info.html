@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static compress %}
+
+{% block title %}CTF{% endblock %}
+
+{% block body %}
+{% load i18n %}
+<div class="container">
+
+<div class="row">
+    <div class="col-sm-12">
+        <h1><marquee behavior=alternate>CTF</marquee></h1>
+        <h3 class="text-center">
+            Dzisiaj po obiedzie (około 15:45) zaczynamy CTF, czyli konkurs hackerski Capture The Flag. Zadania będą polegały na znalezieniu flag ukrytych gdzieś. Rywalizować możecie w drużynach maksymalnie 3-osobowych. Zainteresowanych zapraszamy przed 15:15 do kadrówki w celu utworzenia konta drużyny. Przyjdźcie w pełnym składzie i z nazwą drużyny!
+        </h3>
+        <h3 class="text-center">
+		W niedalekiej przyszłości przycisk CTF na sio2 przekieruje was na stronę CTF-a, gdzie należy zalogować się nazwą drużyny oraz podanym przez was przy rejestracji hasłem.
+        </h3>
+    </div>
+</div>
+</div>
+{% endblock %}

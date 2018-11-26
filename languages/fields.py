@@ -15,6 +15,7 @@ class LanguageSelectionField(models.CharField):
         self.languages = set(x for x,y in choices)
         
         kwargs['choices'] = choices
+        kwargs['max_length'] = 1024
 
         super(LanguageSelectionField, self).__init__(self, *args, **kwargs)
 
@@ -27,6 +28,7 @@ class LanguageSelectionField(models.CharField):
         return value
 
     def get_prep_value(self, value):
+        if value is None: return ''
         return ','.join(value)
 
     def formfield(self, **kwargs):

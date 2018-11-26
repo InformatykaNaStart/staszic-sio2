@@ -8,7 +8,7 @@ import re
 
 class StaszicLDAPBackend(LDAPBackend):
     default_settings = dict(
-            SERVER_URI = 'ldaps://ad.staszic.waw.pl',
+            SERVER_URI = 'ldap://10.0.13.21',
             USER_DN_TEMPLATE = "cn=%(user)s,cn=Users,dc=ad,dc=staszic,dc=waw,dc=pl",
             USER_ATTR_MAP = dict(
                     first_name = 'givenName',
@@ -21,7 +21,7 @@ class StaszicLDAPBackend(LDAPBackend):
         )
 
     def is_valid_group_name(self, name):
-        if name in ('others', 'staff'): return True
+        if name in ('others', 'staff', 'abs'): return True
         if re.match(r'^k\d\d_[a-h]$', name): return True
         if re.match(r'^gim\d\d_[a-h]$', name): return True
         return False
@@ -44,3 +44,16 @@ class StaszicLDAPBackend(LDAPBackend):
         group, _ = Group.objects.get_or_create(name = 'LDAP :: {}'.format(group_name))
 
         group.user_set.add(user)
+
+############################## django-auth-ldap ##############################
+if True:
+    import logging, logging.handlers
+    logfile = "/tmp/django-ldap-debug.log"
+    my_logger = logging.getLogger('django_auth_ldap')
+    my_logger.setLevel(logging.DEBUG)
+
+    handler = logging.handlers.RotatingFileHandler(
+       logfile, maxBytes=1024 * 500, backupCount=5)
+
+    my_logger.addHandler(handler)
+############################ end django-auth-ldap ############################

@@ -1,0 +1,39 @@
+{% extends "programs/submission_header.html" %}
+{% load i18n %}
+
+{% block admin_buttons %}
+    {{block.super}}
+    <button class="btn btn-default btn-sm" type="button" data-toggle="modal" data-target="#tls_modal">
+         <span class="glyphicon glyphicon-pencil"></span>
+         {% trans "Set time limits" %}
+    </button>
+{% endblock %}
+
+{% block styles %}
+    {{ block.super }}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    {% if can_admin %}
+        <script>
+        $(document).ready(function(){
+		$("#tls_modal_body").load("{% url "submission-set-tls-form" submission.submission.id %}");
+        });
+        </script>
+    {% endif %}
+{% endblock %}
+
+{% block extra %}
+{{block.super}}
+<div class="modal" tabindex="-1" role="dialog" id="tls_modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body" id="tls_modal_body">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

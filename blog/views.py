@@ -7,6 +7,6 @@ from oioioi.base.main_page import register_main_page_view
 def is_anonymous(request):
     return (not request.user.is_authenticated())
 
-@register_main_page_view(order=100, condition=is_anonymous)
+@register_main_page_view(order=100)
 def blog_view(request):
     return render(request, 'blog/main.html', {})

@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+
+<h1> New ACL Hook</h1>
+<p><strong>ACL: </strong> {{ acl }}</p>
+
+<form method="post">
+{% csrf_token %}
+{{ form.media }}
+{% include "ingredients/form.html" with form=form %}
+<input class="btn btn-primary" type="submit" value="Hook">
+</form>
+
+{% endblock %}
