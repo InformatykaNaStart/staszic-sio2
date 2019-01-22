@@ -7,7 +7,10 @@ def submission_limit(pi):
     return pi.submissions_limit
 
 def submissions(request, pi):
-    return Submission.objects.filter(kind='NORMAL', user=request.user, problem_instance=pi).count()
+    try:
+        return Submission.objects.filter(kind='NORMAL', user=request.user, problem_instance=pi).count()
+    except:
+        return 0
 
 def limits_view(request, pid):
     pi = get_object_or_404(ProblemInstance, id=pid)
