@@ -3,7 +3,8 @@ from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
 from oioioi.contests.models import ProblemInstance, Round
 from utils import stacked_inline_for, tabular_inline_for
 from ranking_columns import ProblemInstanceColumn
-from models import RoundRankingConfig, AdvancedRankingConfig
+from models import RoundRankingConfig, AdvancedRankingConfig, MultiroundRankingConfig, RoundInRanking
+from django.contrib.admin import StackedInline
 
 class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
     modules_with_subclasses = ['ranking_types']
@@ -162,12 +163,53 @@ class ContestRanking(RankingTypeBase):
                 result.append(ProblemInstanceColumn(self.ranking, problem_instance, **cfg))
         return result
 
-# komentuję, bo sypie 500 ~hugo
 
-#class RoundRanking(RankingTypeBase):
-#    description = 'Ranking for a round'
-#    type_id = 'round_ranking'
-#    
-#    @classmethod
-#    def get_admin_inlines(cls):
-#        return [stacked_inline_for(RoundRankingConfig, cls)]
+class MultiroundRanking(RankingTypeBase):
+    description = 'Multiround ranking'
+    type_id = 'multiround_ranking'
+
+    @classmethod
+    def get_admin_inlines(cls):
+        return super(MultiroundRanking, cls).get_admin_inlines() + [stacked_inline_for(MultiroundRankingConfig, cls), RoundInRankingInline]
+
+    @property
+    def config(self):
+        if hasattr(self.ranking, 'multiroundrankingconfig'):
+            return self.ranking.multiroundrankingconfig
+        return MultiroundRankingConfig()
+
+    def get_columns(self):
+        result = []
+        cfg = self.config.dict_config
+        rounds = [r.round.id for r in RoundInRanking.objects.filter(ranking=self.ranking.id)]
+        pis = ProblemInstance.objects.filter(round__contest=self.contest, round__id__in=rounds).order_by('round__start_date', 'short_name')
+        for problem_instance in pis:
+            result.append(ProblemInstanceColumn(self.ranking, problem_instance, **cfg))
+        return result
+
+
+class RoundInRankingInline(StackedInline):
+    model = RoundInRanking
+    ranking_type = 'multiround_ranking'
+    extra = 0
+    inline_classes = ('collapse open', )
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "round":
+            kwargs["queryset"] = Round.objects.filter(contest=request.contest)
+        return super(RoundInRankingInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def has_add_permission(self, request):
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        # Protected by parent ModelAdmin
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        return True
+
+    def get_fieldsets(self, request, obj=None):
+        fields = ['round']
+        fdsets = [(None, {'fields': fields})]
+        return fdsets

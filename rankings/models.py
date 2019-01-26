@@ -61,6 +61,29 @@ class RoundRankingConfig(models.Model):
             trial_visibility = self.trial_visibility,
             )
 
+
+class MultiroundRankingConfig(models.Model):
+    ranking = models.OneToOneField(StaszicRanking)
+
+    round_coef = models.IntegerField(default=1, verbose_name="Contest coefficient")
+    round_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, default='last', verbose_name='Contest scoring type')
+    contest_coef = models.IntegerField(default=0, verbose_name='All-time coefficient')
+    contest_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, verbose_name='All-time scoring type', default='best')
+
+    column_visibility = models.CharField(max_length=8, choices=COLUMN_VISIBILITY_TYPES, default='end')
+
+    @property
+    def dict_config(self):
+        return dict(
+            round_coef = self.round_coef,
+            round_type = self.round_type,
+            contest_coef = self.contest_coef,
+            contest_type = self.contest_type,
+            visibility_type = self.column_visibility,
+            trial_visibility=True,
+            )
+
+
 class AdvancedRankingConfig(models.Model):
     ranking = models.ForeignKey(StaszicRanking)
     round = models.CharField(verbose_name='Round name', max_length=256)
@@ -91,3 +114,8 @@ class TableRendererConfig(models.Model):
     ranking = models.OneToOneField(StaszicRanking)
 
     medals = models.CharField(max_length=8, choices=MEDALS_CHOICES, default='none')
+
+
+class RoundInRanking(models.Model):
+    ranking = models.ForeignKey(StaszicRanking)
+    round = models.ForeignKey(Round)
