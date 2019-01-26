@@ -1,0 +1,16 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+{% load i18n %}
+
+{% block title %}{% trans "Rankings" %}{% endblock %}
+
+{% block styles %}
+{{ block.super }}
+<link href="{% static "rankings/ranking.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block main-content %}
+	<h1>{% trans "Rankings" %}</h1>
+    <br><br>
+    <div style="text-align:center">{% trans "There are no rankings yet :(" %}</div>
+{% endblock %}
