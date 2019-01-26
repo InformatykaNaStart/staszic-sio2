@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-20 14:18+0100\n"
+"POT-Creation-Date: 2019-01-26 20:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -134,10 +134,16 @@ msgstr ""
 msgid "User"
 msgstr "Użytkownik"
 
+#: rankings/templates/rankings/none.html:5
+#: rankings/templates/rankings/none.html:13
 #: rankings/templates/rankings/ranking.html:5
 #: rankings/templates/rankings/ranking.html:13 rankings/views.py:13
 msgid "Rankings"
 msgstr "Rankingi"
+
+#: rankings/templates/rankings/none.html:15
+msgid "There are no rankings yet :("
+msgstr "Nie ma jeszcze żadnych rankingów :("
 
 #: reports/templates/programs/report-body.html:37
 msgid "Test report details"
@@ -211,17 +217,17 @@ msgstr "Rozwiązanie wzorcowe dla %(problem)s"
 
 #: timelimits/templates/programs/submission_header.html:8
 msgid "Set time limits"
-msgstr ""
+msgstr "Ustaw limity"
 
 #: tree/templates/tree.html:4 tree/templates/tree.html:8
 #: tree/templates/tree/tree.html:4 tree/templates/tree/tree.html:8
 msgid "Select contest"
-msgstr ""
+msgstr "Wybierz konkurs"
 
 #: tree/templates/tree.html:23 tree/templates/tree/tree.html:23
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: tree/templates/tree.html:23 tree/templates/tree/tree.html:23
 msgid "Name"
-msgstr ""
+msgstr "Nazwa"

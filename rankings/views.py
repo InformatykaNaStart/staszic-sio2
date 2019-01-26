@@ -30,10 +30,20 @@ def ranking_view(request, ranking_id=None):
     rendered_ranking = ranking.renderer.render(request, ranking_data)
 
     rankings = StaszicRanking.objects.filter(contest = request.contest)
+    visible_rankings = []
+    for r in rankings:
+        if 'ACM' in str(ranking.type): data = ranking.type.calculate_data(request)
+        else: data = ranking.type.calculate_data()
+        data = ranking.type.finalize_ranking(request, data)
+        if len(data['columns']) > 0:
+            visible_rankings.append(r)
 
-    return render(request, 'rankings/ranking.html', {
-            'can_admin': can_admin_contest(request.user, request.contest),
-            'ranking': ranking,
-            'rendered_ranking': rendered_ranking,
-            'rankings': rankings,
-        })
+    if len(visible_rankings) > 0:
+        return render(request, 'rankings/ranking.html', {
+                'can_admin': can_admin_contest(request.user, request.contest),
+                'ranking': ranking,
+                'rendered_ranking': rendered_ranking,
+                'rankings': visible_rankings,
+            })
+    else:
+        return render(request, 'rankings/none.html', {})
