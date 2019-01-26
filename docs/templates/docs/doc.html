@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block styles %} {{ block.super }} 
+<style>
+    code {
+        background-color: white;
+    }
+</style>
+{% endblock %}
 {% block title %} {{title}} {% endblock %}
 {% block body %}
 
-{{ doc }}
+    <div style="margin-left:5%; margin-right:5%">
+    {{ doc }}
+    </div>
 
 {% endblock %}
 
