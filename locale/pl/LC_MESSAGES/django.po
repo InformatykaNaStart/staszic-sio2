@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-26 20:26+0000\n"
+"POT-Creation-Date: 2019-01-28 21:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -137,13 +137,17 @@ msgstr "Użytkownik"
 #: rankings/templates/rankings/none.html:5
 #: rankings/templates/rankings/none.html:13
 #: rankings/templates/rankings/ranking.html:5
-#: rankings/templates/rankings/ranking.html:13 rankings/views.py:13
+#: rankings/templates/rankings/ranking.html:13 rankings/views.py:16
 msgid "Rankings"
 msgstr "Rankingi"
 
 #: rankings/templates/rankings/none.html:15
 msgid "There are no rankings yet :("
 msgstr "Nie ma jeszcze żadnych rankingów :("
+
+#: rankings/templates/rankings/ranking.html:22
+msgid "Generated"
+msgstr "Wygenerowano"
 
 #: reports/templates/programs/report-body.html:37
 msgid "Test report details"

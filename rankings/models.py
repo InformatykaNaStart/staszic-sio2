@@ -119,3 +119,9 @@ class TableRendererConfig(models.Model):
 class RoundInRanking(models.Model):
     ranking = models.ForeignKey(StaszicRanking)
     round = models.ForeignKey(Round)
+
+
+class CachedRankingData(models.Model):
+    time = models.DateTimeField()
+    data = models.TextField()
+    ranking = models.ForeignKey(StaszicRanking)

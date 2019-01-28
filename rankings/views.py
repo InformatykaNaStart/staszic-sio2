@@ -1,10 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from models import StaszicRanking
+from models import StaszicRanking, CachedRankingData
 from oioioi.base.permissions import make_condition, enforce_condition
 from oioioi.base.menu import menu_registry
 from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest
 from django.core.urlresolvers import reverse
+import pickle
+import datetime
+from datetime import timedelta
 
 @make_condition()
 def has_rankings(request, *args, **kwargs):
@@ -24,7 +27,20 @@ def ranking_view(request, ranking_id=None):
     if 'ACM' in str(ranking.type):
         ranking_data = ranking.type.calculate_data(request)
     else:
-        ranking_data = ranking.type.calculate_data()
+        time = datetime.datetime.now()
+        min_time = time - timedelta(minutes=2)
+        entries = CachedRankingData.objects.filter(ranking=ranking, time__gt=min_time)
+        generated_at = time
+        if len(entries) > 0:
+            cached_data = entries[0]
+            ranking_data = pickle.loads(cached_data.data)
+            generated_at = cached_data.time
+        else:
+            ranking_data = ranking.type.calculate_data()
+            CachedRankingData.objects.filter(ranking=ranking).delete()
+            entry = CachedRankingData(ranking=ranking, time=time, data=pickle.dumps(ranking_data))
+            entry.save()
+
     ranking_data = ranking.type.finalize_ranking(request, ranking_data)
 
     rendered_ranking = ranking.renderer.render(request, ranking_data)
@@ -44,6 +60,7 @@ def ranking_view(request, ranking_id=None):
                 'ranking': ranking,
                 'rendered_ranking': rendered_ranking,
                 'rankings': visible_rankings,
+                'generated_at': generated_at
             })
     else:
         return render(request, 'rankings/none.html', {})
