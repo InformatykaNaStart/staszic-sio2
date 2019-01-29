@@ -19,6 +19,11 @@
     {% if user.is_superuser %}
     <strong>Jesteś superuserem. Widzisz ranking niezależnie od jego ustawień widoczności. Aby zobaczyć, co widzą dzieci, zaloguj się na czyjeś konto.</strong><br><br>
     {% endif %}
-	<div style="text-align: left; font-size: 60%; color:gray;">{% trans "Generated" %} {{ generated_at|date:"H:i:s" }}</div>
+	<div style="text-align: left; font-size: 60%; color:gray;">{{ generated_at|date:"H:i:s" }}</div>
 	{{ rendered_ranking }}
+	<!--
+	generate: {{ timing.generate }}
+	finalize: {{ timing.finalize }}
+	queries: {{ timing.queries }}
+	-->
 {% endblock %}

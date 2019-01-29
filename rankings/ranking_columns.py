@@ -4,6 +4,7 @@ from staszic.rankings.ranking_scores import SingleScore, CombinedScore
 from django.template import Engine, Context
 from oioioi.contests.views import problem_statement_view
 from django.core.urlresolvers import reverse
+from oioioi.contests.utils import is_contest_admin
 
 class RankingColumnBase(RegisteredSubclassesBase, ObjectWithMixins):
     modules_with_subclasses = ['ranking_columns']
@@ -46,7 +47,7 @@ class ProblemInstanceColumn(RankingColumnBase):
             return None
 
     def can_access(self, request):
-        if request.user.is_superuser: return True
+        if request.user.is_superuser or is_contest_admin(request): return True
         if self.visible_after is None: return False
         return request.timestamp >= self.visible_after
 
@@ -58,7 +59,7 @@ class ProblemInstanceColumn(RankingColumnBase):
         )))
 
     def get_scores(self):
-        submissions = self.problem_instance.submission_set.filter(kind='NORMAL').exclude(score=None).order_by('-date')
+        submissions = self.problem_instance.submission_set.filter(kind='NORMAL').exclude(score=None).order_by('-date').select_related()
         
         start_date = self.problem_instance.round.start_date
         end_date = self.problem_instance.round.end_date

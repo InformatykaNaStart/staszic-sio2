@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 import pickle
 import datetime
 from datetime import timedelta
+import time # debug only
 
 @make_condition()
 def has_rankings(request, *args, **kwargs):
@@ -27,8 +28,9 @@ def ranking_view(request, ranking_id=None):
     if 'ACM' in str(ranking.type):
         ranking_data = ranking.type.calculate_data(request)
     else:
-        time = datetime.datetime.now()
-        min_time = time - timedelta(minutes=2)
+        ts = time.time()
+        time_now = datetime.datetime.now()
+        min_time = time_now - timedelta(minutes=2)
         entries = CachedRankingData.objects.filter(ranking=ranking, time__gt=min_time)
         generated_at = time
         if len(entries) > 0:
@@ -38,20 +40,20 @@ def ranking_view(request, ranking_id=None):
         else:
             ranking_data = ranking.type.calculate_data()
             CachedRankingData.objects.filter(ranking=ranking).delete()
-            entry = CachedRankingData(ranking=ranking, time=time, data=pickle.dumps(ranking_data))
+            entry = CachedRankingData(ranking=ranking, time=time_now, data=pickle.dumps(ranking_data))
             entry.save()
+        ranking_data['timing']['generate'] = time.time() - ts
 
+    ts = time.time()
     ranking_data = ranking.type.finalize_ranking(request, ranking_data)
+    ranking_data['timing']['finalize'] = time.time() - ts
 
     rendered_ranking = ranking.renderer.render(request, ranking_data)
 
     rankings = StaszicRanking.objects.filter(contest = request.contest)
     visible_rankings = []
     for r in rankings:
-        if 'ACM' in str(ranking.type): data = ranking.type.calculate_data(request)
-        else: data = ranking.type.calculate_data()
-        data = ranking.type.finalize_ranking(request, data)
-        if len(data['columns']) > 0:
+        if r.type.has_any_visible_columns(request):
             visible_rankings.append(r)
 
     if len(visible_rankings) > 0:
@@ -60,7 +62,8 @@ def ranking_view(request, ranking_id=None):
                 'ranking': ranking,
                 'rendered_ranking': rendered_ranking,
                 'rankings': visible_rankings,
-                'generated_at': generated_at
+                'generated_at': generated_at,
+                'timing': ranking_data['timing']
             })
     else:
         return render(request, 'rankings/none.html', {})

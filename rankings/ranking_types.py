@@ -5,6 +5,7 @@ from utils import stacked_inline_for, tabular_inline_for
 from ranking_columns import ProblemInstanceColumn
 from models import RoundRankingConfig, AdvancedRankingConfig, MultiroundRankingConfig, RoundInRanking
 from django.contrib.admin import StackedInline
+from django.db import connection
 
 class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
     modules_with_subclasses = ['ranking_types']
@@ -23,6 +24,7 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
         return []
 
     def calculate_data(self, request = None):
+        start_queries = len(connection.queries)
         data = []
         umap = {}
         if request is None:
@@ -48,6 +50,7 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
         ranking = dict(
                 columns = columns,
                 data = data,
+                timing = dict(queries=len(connection.queries) - start_queries),
         )
         return ranking
 
@@ -58,6 +61,11 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
         ranking_data = self.put_places(request, ranking_data)
 
         return ranking_data
+
+    def has_any_visible_columns(self, request):
+        columns = self.get_columns()
+        return any([column.can_access(request) for column in columns])
+
 
     def filter_columns(self, request, ranking_data):
         all_columns = ranking_data['columns']

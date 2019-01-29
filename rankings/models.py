@@ -123,5 +123,5 @@ class RoundInRanking(models.Model):
 
 class CachedRankingData(models.Model):
     time = models.DateTimeField()
-    data = models.TextField()
+    data = models.BinaryField()
     ranking = models.ForeignKey(StaszicRanking)
