@@ -14,6 +14,7 @@ class RankingAdmin(admin.ModelAdmin):
     readonly_fields = ['type_name', 'renderer_name', 'last_calculation', 'serialized_data']
     exclude = ['contest']
     list_display = ['name', 'type_name', 'order']
+    ordering = ('-order',)
         
     def get_inlines():
         def get_class_inlines(cls):
