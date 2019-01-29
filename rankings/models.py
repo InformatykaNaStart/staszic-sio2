@@ -13,6 +13,8 @@ class StaszicRanking(models.Model):
     renderer_name = DottedNameField('staszic.rankings.ranking_renderers.RankingRendererBase')
     contest = models.ForeignKey('contests.Contest')
 
+    order = models.IntegerField(null=True, blank=True, default=0)
+
     last_calculation = models.DateTimeField(null=True, blank=True)
     serialized_data = models.TextField()
 

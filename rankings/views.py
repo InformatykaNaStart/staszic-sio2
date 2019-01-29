@@ -50,7 +50,7 @@ def ranking_view(request, ranking_id=None):
 
     rendered_ranking = ranking.renderer.render(request, ranking_data)
 
-    rankings = StaszicRanking.objects.filter(contest = request.contest)
+    rankings = StaszicRanking.objects.filter(contest = request.contest).order_by('-order')
     visible_rankings = []
     for r in rankings:
         if r.type.has_any_visible_columns(request):
