@@ -1,0 +1,13 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+{% load i18n %}
+
+{% block title %}{% trans "Time limits reloaded" %}{% endblock %}
+
+{% block main-content %}
+<h3>{% trans "Time limits reloaded successfully" %}</h3>
+<a href="{{back}}">{% trans "Go back to problems list" %}</a><br><br>
+    {% for line in log %}
+    <b>{{ line.test }}</b>: {{ line.info}}<br>
+    {% endfor %}
+{% endblock %}
