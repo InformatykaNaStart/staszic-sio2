@@ -55,12 +55,13 @@ class StaszicContestController(OIContestController):
         return acl.query_acl(request, problem_instance, 'submit', default)
 
     def fill_evaluation_environ_post_problem(self, environ, submission):
-        environ['recipe'].insert(0, ('create_judgings', 'staszic.feedback.utils.create_judgings'))
-        
-        idx = find_recipe_entry(environ['recipe'], 'collect_tests')
-
-        environ['recipe'].insert(idx+1, ('polish_tests', 'staszic.feedback.utils.put_judgings_into_tests'))
-        environ['recipe'].append(('invalidate_judgings', 'staszic.feedback.utils.invalidate_judgings'))
+        try:
+            environ['recipe'].insert(0, ('create_judgings', 'staszic.feedback.utils.create_judgings'))
+            idx = find_recipe_entry(environ['recipe'], 'collect_tests')
+            environ['recipe'].insert(idx+1, ('polish_tests', 'staszic.feedback.utils.put_judgings_into_tests'))
+            environ['recipe'].append(('invalidate_judgings', 'staszic.feedback.utils.invalidate_judgings'))
+        except:
+            pass
 
     def judge_prepare(self, judging, test, config):
         if test.kind == 'EXAMPLE': return False
