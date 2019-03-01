@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 from staszic.feedback.utils import get_stats_from_judging
 from staszic.feedback.models import SmartJudgeConfig
+from oioioi.contests.utils import can_admin_contest
 
 class ParticipantsControllerWithACL(ParticipantsController):
     def can_enter_contest(self, request):
@@ -96,6 +97,7 @@ class StaszicContestController(OIContestController):
 
     def can_see_stats(self, request, judging):
         if request.user.is_superuser: return True
+        if can_admin_contest(request.user, judging.submission.problem_instance.contest): return True
         if request.user != judging.submission.user: return False
         contest = judging.submission.problem_instance.contest
         if contest is None: return False
@@ -108,6 +110,7 @@ class StaszicContestController(OIContestController):
     def can_see_progress(self, request, judging):
         try:
             if request.user.is_superuser: return True
+            if can_admin_contest(request.user, judging.submission.problem_instance.contest): return True
             if request.user != judging.submission.user: return False
             contest = judging.submission.problem_instance.contest
             if contest is None: return False

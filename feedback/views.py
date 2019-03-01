@@ -4,7 +4,7 @@ from utils import get_stats_from_judging
 
 def judging(request, jid):
     judging = get_object_or_404(Judging, pk=jid)
-    controller = judging.submission.problem_instance.controller
+    controller = judging.submission.problem_instance.contest.controller
     return render(request, 'feedback/judging_base.html', dict(
         judging=judging,
         can_see_stats=controller.can_see_stats(request, judging),
