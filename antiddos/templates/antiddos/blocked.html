@@ -1,0 +1,8 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+{% load i18n %}
+
+{% block title %}{% trans "Submission blocked" %}{% endblock %}
+
+{% block main-content %} <h3>{% trans "Your submission was blocked." %}</h3> <b>No more than {{limit}} queued submissions per 
+user are allowed.</b> Please try to submit again when some of your submissions get judged. {% endblock %}
