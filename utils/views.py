@@ -55,7 +55,7 @@ def example_tests_view(request, pi_short):
     return response
 
 
-@enforce_condition(contest_exists & can_enter_contest & is_superuser)
+@enforce_condition(contest_exists & can_enter_contest & is_contest_admin)
 def reload_limits_from_config_view(request, problem_instance_id):
     pi = get_object_or_404(ProblemInstance, id=problem_instance_id)
     config = pi.problem.extraconfig.parsed_config
