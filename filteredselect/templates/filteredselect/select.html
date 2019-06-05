@@ -1,0 +1,36 @@
+<script>
+    var {{name}}_choices = [
+        {% for choice in choices %}
+            [{{choice.0}}, "{{choice.1}}"],
+        {% endfor %}
+    ]
+    function filter_choices() {
+        var query = $('#{{name}}_fquery').val();
+        if (!query) query="";
+        console.log(query);
+        query = query.toLowerCase();
+        var result = [];
+        for (i in {{name}}_choices) {
+            if ({{name}}_choices[i][1].toLowerCase().indexOf(query) != -1)
+            {
+                result.push({{name}}_choices[i])
+            }
+        }
+
+        $('#{{name}}_select').empty();
+        for (i in result) {
+            child = '<option value="' + result[i][0] + '" ';
+            if (result.length == 1) child += 'selected';
+            child += '>' + result[i][1] + '</option>';
+            $('#{{name}}_select').append(child);
+        }
+    }
+</script>
+
+<input type="text" id="{{name}}_fquery" oninput="filter_choices()" placeholder="Type here to search"/><br>
+
+<select name="{{name}}" id="{{name}}_select" size="10" style="width:100%">
+    {% for choice in choices %}
+        <option value="{{choice.0}}">{{choice.1}}</option>
+    {% endfor %}}
+</select>
