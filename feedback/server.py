@@ -1,5 +1,6 @@
 from django.conf import settings
 from models import Judging
+from django.utils import timezone
 import SimpleXMLRPCServer
 
 class ServerMethods(object):
@@ -55,6 +56,7 @@ class ServerMethods(object):
         judging.config['stats']['DO'] += 1
         if code not in judging.config['results']: judging.config['results'][code] = 0
         judging.config['results'][code] += 1
+        judging.finish_date = timezone.now()
         judging.save()
 
 #        print 'J.FI', judging, name, code
