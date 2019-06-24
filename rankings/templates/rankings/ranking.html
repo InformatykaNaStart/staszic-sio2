@@ -19,7 +19,16 @@
     {% if user.is_superuser %}
     <strong>Jesteś superuserem. Widzisz ranking niezależnie od jego ustawień widoczności. Aby zobaczyć, co widzą dzieci, zaloguj się na czyjeś konto.</strong><br><br>
     {% endif %}
-	<div style="text-align: left; font-size: 60%; color:gray;">{{ generated_at|date:"H:i:s" }}</div>
+
+	{% if generated_at %}
+		<div style="text-align: left; font-size: 60%; color:gray;">
+			{{ generated_at|date:"H:i:s" }}
+			{% if can_admin %}
+				<a style="padding-left:1em" href="{% url "ranking_cache_flush" ranking.pk %}">[{% trans "Flush ranking cache" %}]</a>
+			{% endif %}
+		</div>
+	{% endif %}
+
 	{{ rendered_ranking }}
 	<!--
 	generate: {{ timing.generate }}
