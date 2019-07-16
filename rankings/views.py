@@ -6,8 +6,10 @@ from oioioi.base.menu import menu_registry
 from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest, is_contest_admin
 from django.core.urlresolvers import reverse
 import pickle
+import csv
 import datetime
 from datetime import timedelta
+from django.http import HttpResponse
 import time # debug only
 
 @make_condition()
@@ -73,3 +75,29 @@ def cache_flush_view(request, ranking_id):
     ranking = get_object_or_404(StaszicRanking, pk=ranking_id, contest=request.contest)
     CachedRankingData.objects.filter(ranking=ranking).delete()
     return redirect('ranking', ranking_id=ranking_id)
+
+@enforce_condition(contest_exists & can_enter_contest & is_contest_admin)
+def csv_view(request, ranking_id):
+    ranking = get_object_or_404(StaszicRanking, pk=ranking_id, contest=request.contest)
+    ranking_data = ranking.type.calculate_data()
+    ranking_data = ranking.type.finalize_ranking(request, ranking_data)
+    ranking.renderer.prepare_render(request, ranking_data)
+
+    response = HttpResponse(content_type='text/csv; charset=utf-8')
+    response['Content-Disposition'] = 'attachment; filename="ranking.csv"'\
+
+    writer = csv.writer(response)
+
+    def uwriterow(row):
+        writer.writerow([s.encode('utf-8') if isinstance(s, unicode) else s for s in row])
+
+    uwriterow(
+        ['']*3 +
+        [column.problem_instance.short_name for column in ranking_data['columns']] +
+        [summary for summary, _ in ranking_data['row_summary']])
+    for row in ranking_data['data']:
+        uwriterow(
+            [row['place'], row['user'].username, row['user'].get_full_name()] +
+            [score.render_score() if score else ' ' for score in row['scores']] +
+            [f(row) for _, f in ranking_data['row_summary']])
+    return response
