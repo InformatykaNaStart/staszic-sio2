@@ -20,26 +20,24 @@
 		{% endfor %}
 	</ul>
 
-	{% if can_admin %}
-		<div style="text-align: right">
-			<a role="button" class="btn btn-sm btn-default text-center" href="{% url "ranking_csv" ranking.pk %}">
-				<span class="glyphicon glyphicon-save-file"></span>
-				{% trans "Download CSV" %}
-			</a>
-			{% if generated_at %}
-				<a role="button" class="btn btn-sm btn-default text-center" href="{% url "ranking_cache_flush" ranking.pk %}">
+	<div style="text-align: right">
+		{% if can_admin %}
+
+				<a role="button" class="btn btn-sm btn-default text-center" href="{% url "ranking_csv" ranking.pk %}">
+					<span class="glyphicon glyphicon-save-file"></span>
+					{% trans "Download CSV" %}
+				</a>
+				<a role="button" class="btn btn-sm btn-default text-center {% if not generated_at %}disabled{% endif %}" href="{% url "ranking_cache_flush" ranking.pk %}">
 					<span class="glyphicon glyphicon-refresh"></span>
 					{% trans "Recalculate" %}
 				</a>
-			{% endif %}
-		</div>
-		<br>
-	{% endif %}
+		{% endif %}
+	</div>
 	{% if generated_at %}
-
+		<small style="color: gray">{{ generated_at|date:"H:i:s" }}</small>
 	{% endif %}
 
-	<!-- {{ generated_at|date:"H:i:s" }} -->
+
 
 	{{ rendered_ranking }}
 	<!--

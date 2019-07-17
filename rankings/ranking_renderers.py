@@ -6,6 +6,8 @@ from models import TableRendererConfig, SummaryRankingConfig
 from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest
 from ranking_scores import fancy_score
 import math
+from django.http import HttpResponseForbidden, HttpResponse
+import csv
 
 class SummaryMixin(object):
     @classmethod
@@ -76,7 +78,6 @@ class TableRenderer(RankingRendererBase):
 
     def render(self, request, ranking_data):
         import pprint
-
         self.prepare_render(request, ranking_data)
 
         return render_to_string('rankings/table.html', request=request, context=dict(

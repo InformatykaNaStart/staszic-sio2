@@ -127,3 +127,11 @@ class CachedRankingData(models.Model):
     time = models.DateTimeField()
     data = models.BinaryField()
     ranking = models.ForeignKey(StaszicRanking)
+
+class RankingFilter(models.Model):
+    ranking = models.ForeignKey(StaszicRanking)
+    type_name = DottedNameField('staszic.rankings.ranking_filter.RankingFilterBase')
+
+class TimeFilterConfig(models.Model):
+    time = models.DateTimeField()
+    mode = models.CharField(max_length=8, choices=[('before', 'Before'), ('after', 'After')])
