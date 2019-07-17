@@ -11,23 +11,35 @@
 
 {% block main-content %}
 	<h1>{% trans "Rankings" %}</h1>
+
+
+
 	<ul class="nav nav-tabs" style="margin-top:1em; margin-bottom:2em;">
 		{% for r in rankings %}
 			<li role="presentation" class="{% ifequal r.name ranking.name %}active{% endifequal %}"><a href="{% url "ranking" r.pk %}">{{ r.name }}</a></li>
 		{% endfor %}
 	</ul>
-    {% if user.is_superuser %}
-    <strong>Jesteś superuserem. Widzisz ranking niezależnie od jego ustawień widoczności. Aby zobaczyć, co widzą dzieci, zaloguj się na czyjeś konto.</strong><br><br>
-    {% endif %}
 
-	{% if generated_at %}
-		<div style="text-align: left; font-size: 60%; color:gray;">
-			{{ generated_at|date:"H:i:s" }}
-			{% if can_admin %}
-				<a style="padding-left:1em" href="{% url "ranking_cache_flush" ranking.pk %}">[{% trans "Flush ranking cache" %}]</a>
+	{% if can_admin %}
+		<div style="text-align: right">
+			<a role="button" class="btn btn-sm btn-default text-center" href="{% url "ranking_csv" ranking.pk %}">
+				<span class="glyphicon glyphicon-save-file"></span>
+				{% trans "Download CSV" %}
+			</a>
+			{% if generated_at %}
+				<a role="button" class="btn btn-sm btn-default text-center" href="{% url "ranking_cache_flush" ranking.pk %}">
+					<span class="glyphicon glyphicon-refresh"></span>
+					{% trans "Recalculate" %}
+				</a>
 			{% endif %}
 		</div>
+		<br>
 	{% endif %}
+	{% if generated_at %}
+
+	{% endif %}
+
+	<!-- {{ generated_at|date:"H:i:s" }} -->
 
 	{{ rendered_ranking }}
 	<!--
