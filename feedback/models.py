@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils import timezone
 from django.db import models
 from oioioi.contests.models import Contest, submission_statuses, Submission
 from django.contrib.postgres.fields import JSONField
@@ -43,6 +44,8 @@ class Judging(models.Model):
     kind = models.CharField(max_length=32)
     config = JSONField(default=dict)
     active = models.BooleanField(default=True)
+    creation_date = models.DateTimeField(default=timezone.now, blank=True)
+    finish_date = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return '<Judging pk=%d submission=%d kind=%s config=%s>' % (self.pk, self.submission.pk, self.kind, self.config)

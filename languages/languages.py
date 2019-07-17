@@ -20,3 +20,7 @@ class PascalProgrammingLanguage(ProgrammingLanguageBase):
 class PythonProgrammingLanguage(ProgrammingLanguageBase):
     description = 'Python'
     extensions = ['py']
+
+class HaskellProgrammingLanguage(ProgrammingLanguageBase):
+    description = 'Haskell'
+    extensions = ['hs']
