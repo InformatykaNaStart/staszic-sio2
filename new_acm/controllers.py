@@ -149,4 +149,4 @@ class StaszicACM(StaszicContestController):
         if context.is_admin:
             return True
         rtimes = self.get_round_times(request_or_context, round)
-        return rtimes.is_active(context.timestamp)
+        return not rtimes.is_future(context.timestamp)
