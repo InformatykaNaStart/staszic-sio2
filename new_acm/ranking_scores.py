@@ -75,6 +75,8 @@ class ACMScore(RankingScoreBase):
     def render_score_active(self):
         return self.render_score_from(self.score_template_active)
 
+    def render_score_string(self):
+        return '{} {} {}'.format(self.score, self.ntries, self.acmtime)
 
     def __repr__(self):
         return u'<ACMScore user={} score={} submission={} acmtime={}>'.format(self.user, self.score, self.submission.pk)

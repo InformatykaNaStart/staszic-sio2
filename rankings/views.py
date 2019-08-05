@@ -5,6 +5,7 @@ from oioioi.base.permissions import make_condition, enforce_condition
 from oioioi.base.menu import menu_registry
 from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest, is_contest_admin
 from django.core.urlresolvers import reverse
+from staszic.new_acm.ranking_types import ACMRanking
 import pickle
 import csv
 import datetime
@@ -26,24 +27,24 @@ def ranking_view(request, ranking_id=None):
     else:
         ranking = get_object_or_404(StaszicRanking, pk=ranking_id, contest=request.contest)
 
-    if 'ACM' in str(ranking.type):
-        ranking_data = ranking.type.calculate_data(request)
+    ts = time.time()
+    time_now = datetime.datetime.now()
+    min_time = time_now - timedelta(minutes=2)
+    entries = CachedRankingData.objects.filter(ranking=ranking, time__gt=min_time)
+    generated_at = None
+    if len(entries) > 0:
+        cached_data = entries[0]
+        ranking_data = pickle.loads(cached_data.data)
+        generated_at = cached_data.time
     else:
-        ts = time.time()
-        time_now = datetime.datetime.now()
-        min_time = time_now - timedelta(minutes=2)
-        entries = CachedRankingData.objects.filter(ranking=ranking, time__gt=min_time)
-        generated_at = None
-        if len(entries) > 0:
-            cached_data = entries[0]
-            ranking_data = pickle.loads(cached_data.data)
-            generated_at = cached_data.time
+        if isinstance(ranking.type, ACMRanking):
+            ranking_data = ranking.type.calculate_data(request)
         else:
             ranking_data = ranking.type.calculate_data()
             CachedRankingData.objects.filter(ranking=ranking).delete()
             entry = CachedRankingData(ranking=ranking, time=time_now, data=pickle.dumps(ranking_data))
             entry.save()
-        ranking_data['timing']['generate'] = time.time() - ts
+    ranking_data['timing']['generate'] = time.time() - ts
 
     ts = time.time()
     ranking_data = ranking.type.finalize_ranking(request, ranking_data)
@@ -79,7 +80,10 @@ def cache_flush_view(request, ranking_id):
 @enforce_condition(contest_exists & can_enter_contest & is_contest_admin)
 def csv_view(request, ranking_id):
     ranking = get_object_or_404(StaszicRanking, pk=ranking_id, contest=request.contest)
-    ranking_data = ranking.type.calculate_data()
+    if isinstance(ranking.type, ACMRanking):
+        ranking_data = ranking.type.calculate_data(request)
+    else:
+        ranking_data = ranking.type.calculate_data()
     ranking_data = ranking.type.finalize_ranking(request, ranking_data)
     ranking.renderer.prepare_render(request, ranking_data)
 
@@ -98,6 +102,6 @@ def csv_view(request, ranking_id):
     for row in ranking_data['data']:
         uwriterow(
             [row['place'], row['user'].username, row['user'].get_full_name()] +
-            [score.render_score() if score else ' ' for score in row['scores']] +
+            [score.render_score_string() if score else ' ' for score in row['scores']] +
             [f(row) for _, f in ranking_data['row_summary']])
     return response

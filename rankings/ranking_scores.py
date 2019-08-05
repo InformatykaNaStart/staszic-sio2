@@ -14,6 +14,9 @@ class RankingScoreBase(RegisteredSubclassesBase, ObjectWithMixins):
     def render_score(self):
         return self.score
 
+    def render_score_string(self):
+        return str(self.render_score())
+
     def css_classes(self):
         return ''
 

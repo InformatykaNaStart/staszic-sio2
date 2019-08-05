@@ -44,6 +44,9 @@ class ACMRanking(RankingTypeBase):
         res['ranking'] = self
         return res
 
+    def has_any_visible_columns(self, request):
+        return True
+
     @property
     def freeze_time(self):
         rounds = Round.objects.filter(contest=self.contest).order_by('end_date')
