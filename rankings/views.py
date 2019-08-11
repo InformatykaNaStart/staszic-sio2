@@ -2,7 +2,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from models import StaszicRanking, CachedRankingData, PrivacySettings
-from oioioi.base.permissions import make_condition, enforce_condition
+from oioioi.base.permissions import make_condition, enforce_condition, not_anonymous
 from oioioi.base.menu import menu_registry
 from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest, is_contest_admin
 from django.core.urlresolvers import reverse
@@ -108,7 +108,7 @@ def csv_view(request, ranking_id):
             [f(row) for _, f in ranking_data['row_summary']])
     return response
 
-@enforce_condition(contest_exists & can_enter_contest)
+@enforce_condition(contest_exists & can_enter_contest & not_anonymous)
 def privacy_view(request):
     settings, _ = PrivacySettings.objects.get_or_create(user=request.user, contest=request.contest)
     if request.method == 'POST':
