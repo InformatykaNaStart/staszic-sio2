@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-28 21:39+0000\n"
+"POT-Creation-Date: 2019-08-11 20:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,6 +18,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
+
+#: antiddos/templates/antiddos/blocked.html:5
+#, fuzzy
+#| msgid "Submissions"
+msgid "Submission blocked"
+msgstr "Zgłoszenie zablokowane"
+
+#: antiddos/templates/antiddos/blocked.html:7
+msgid "Your submission was blocked."
+msgstr "Twoje zgłoszenie zostało zablokowane"
 
 #: archive/forms.py:5
 msgid "Username"
@@ -125,19 +135,27 @@ msgstr "Wynik"
 msgid "Download code"
 msgstr "Pobierz kod"
 
-#: feedback/models.py:23
+#: feedback/models.py:24
 msgid "Not judged"
 msgstr ""
 
 #: new_acm/templates/new_acm/acm.html:9
-#: rankings/templates/rankings/table.html:8
+#: rankings/templates/rankings/table.html:9
 msgid "User"
 msgstr "Użytkownik"
+
+#: rankings/models.py:137
+msgid "Hide scores"
+msgstr "Ukryj punkty"
+
+#: rankings/models.py:138
+msgid "Hide name"
+msgstr "Ukryj imię i nazwisko"
 
 #: rankings/templates/rankings/none.html:5
 #: rankings/templates/rankings/none.html:13
 #: rankings/templates/rankings/ranking.html:5
-#: rankings/templates/rankings/ranking.html:13 rankings/views.py:16
+#: rankings/templates/rankings/ranking.html:13 rankings/views.py:22
 msgid "Rankings"
 msgstr "Rankingi"
 
@@ -145,9 +163,53 @@ msgstr "Rankingi"
 msgid "There are no rankings yet :("
 msgstr "Nie ma jeszcze żadnych rankingów :("
 
-#: rankings/templates/rankings/ranking.html:22
-msgid "Generated"
-msgstr "Wygenerowano"
+#: rankings/templates/rankings/privacy.html:5
+msgid "Privacy Settings"
+msgstr "Ustawienia prywatności"
+
+#: rankings/templates/rankings/privacy.html:9
+#: rankings/templates/rankings/ranking.html:28
+msgid "Privacy settings"
+msgstr "Ustawienia prywatności"
+
+#: rankings/templates/rankings/privacy.html:11
+msgid ""
+"\n"
+"You can hide your scores for particular tasks or your name, \n"
+"but you can't hide sum of your points.\n"
+"Hiding it would make the ranking unreliable for those willing\n"
+"to compare their performance with other contestans.\n"
+msgstr ""
+"\n"
+"Możesz ukryć wyniki częściowe lub swoje imię i nazwisko, ale nie możesz "
+"ukryć sumy zdobytych punktów.\n"
+"Ukrycie jej uniemożliwiłoby innym uczestnikom konkursu ocenę własnego "
+"poziomu na podstawie rankingu.\n"
+
+#: rankings/templates/rankings/privacy.html:18
+msgid ""
+"\n"
+"Hidden elements will be still visible for you and contest admins.\n"
+"Privacy settings are contest-wide but might not apply to non-standard "
+"ranking types.\n"
+msgstr ""
+"\n"
+"Ukryte elementy będą wciąż widoczne dla Ciebie i dla administratorów "
+"konkursu.\n"
+"Ustawienia prywatności stosują się do całego konkursu, ale mogą nie działać "
+"w przypadku niestandardowych typów rankingów.\n"
+
+#: rankings/templates/rankings/privacy.html:26
+msgid "Save"
+msgstr "Zapisz"
+
+#: rankings/templates/rankings/ranking.html:19
+msgid "Download CSV"
+msgstr "Pobierz CSV"
+
+#: rankings/templates/rankings/ranking.html:23
+msgid "Recalculate"
+msgstr "Przelicz"
 
 #: reports/templates/programs/report-body.html:37
 msgid "Test report details"
@@ -235,3 +297,18 @@ msgstr "ID"
 #: tree/templates/tree.html:23 tree/templates/tree/tree.html:23
 msgid "Name"
 msgstr "Nazwa"
+
+#: utils/templates/utils/reload_limits.html:5
+msgid "Time limits reloaded"
+msgstr ""
+
+#: utils/templates/utils/reload_limits.html:8
+msgid "Time limits reloaded successfully"
+msgstr ""
+
+#: utils/templates/utils/reload_limits.html:9
+msgid "Go back to problems list"
+msgstr ""
+
+#~ msgid "Generated"
+#~ msgstr "Wygenerowano"

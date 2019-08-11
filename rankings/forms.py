@@ -1,5 +1,5 @@
 from django import forms
-from models import StaszicRanking
+from models import StaszicRanking, PrivacySettings
 from ranking_types import RankingTypeBase
 
 def RankingAddFormFactory(contest):
@@ -13,3 +13,9 @@ def RankingAddFormFactory(contest):
         type_name = forms.ChoiceField(choices=CHOICES)
 
     return RankingAddForm
+
+class PrivacySettingsForm(forms.ModelForm):
+    class Meta:
+        model = PrivacySettings
+        fields = ['hide_scores', 'hide_name']
+

@@ -1,11 +1,13 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from models import StaszicRanking, CachedRankingData
+from models import StaszicRanking, CachedRankingData, PrivacySettings
 from oioioi.base.permissions import make_condition, enforce_condition
 from oioioi.base.menu import menu_registry
 from oioioi.contests.utils import can_enter_contest, contest_exists, can_admin_contest, is_contest_admin
 from django.core.urlresolvers import reverse
 from staszic.new_acm.ranking_types import ACMRanking
+from forms import PrivacySettingsForm
 import pickle
 import csv
 import datetime
@@ -105,3 +107,17 @@ def csv_view(request, ranking_id):
             [score.render_score_string() if score else ' ' for score in row['scores']] +
             [f(row) for _, f in ranking_data['row_summary']])
     return response
+
+@enforce_condition(contest_exists & can_enter_contest)
+def privacy_view(request):
+    settings, _ = PrivacySettings.objects.get_or_create(user=request.user, contest=request.contest)
+    if request.method == 'POST':
+        form = PrivacySettingsForm(request.POST)
+        if form.is_valid():
+            settings.hide_scores = form.cleaned_data['hide_scores']
+            settings.hide_name = form.cleaned_data['hide_name']
+            settings.save()
+            return redirect('default-ranking')
+    else:
+        form = PrivacySettingsForm(instance=settings)
+    return render(request, 'rankings/privacy.html', {'form': form})

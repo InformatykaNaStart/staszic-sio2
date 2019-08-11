@@ -3,7 +3,7 @@ from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
 from oioioi.contests.models import ProblemInstance, Round
 from utils import stacked_inline_for, tabular_inline_for
 from ranking_columns import ProblemInstanceColumn
-from models import RoundRankingConfig, AdvancedRankingConfig, MultiroundRankingConfig, RoundInRanking
+from models import RoundRankingConfig, AdvancedRankingConfig, MultiroundRankingConfig, RoundInRanking, PrivacySettings
 from django.contrib.admin import StackedInline
 from django.db import connection
 
@@ -18,6 +18,10 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
 
     def get_columns(self):
         raise NotImplementedError
+
+    def is_user_hidden(self, user):
+        settings, _ = PrivacySettings.objects.get_or_create(user=user, contest=self.contest)
+        return settings.hide_name
 
     @classmethod
     def get_admin_inlines(cls):
@@ -39,7 +43,7 @@ class RankingTypeBase(RegisteredSubclassesBase, ObjectWithMixins):
 
             for k, v in scores.items():
                 if k not in umap:
-                    row = dict(user=k, scores=[None] * ncolumns)
+                    row = dict(user=k, user_hidden=self.is_user_hidden(k), scores=[None] * ncolumns)
                     umap[k] = row
                     data.append(row)
                 else:

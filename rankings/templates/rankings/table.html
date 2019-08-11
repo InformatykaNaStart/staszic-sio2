@@ -1,6 +1,7 @@
 {% load ranking_scores static simple_filters %}
 {% load i18n %}
 
+
 <table class="ranking table-hover">
 	<thead>
 		<tr>
@@ -21,13 +22,33 @@
 		{% for row, medal in data.data|zip:medals %}
 		<tr class="{{medal}}" style="border-top:1px solid #cccccc">
 			<td class="r place">{{ row.place }}.</td>
-			<td class="r full_name" style="text-align:center;">{{ row.user.get_full_name }}</td>
+			<td class="r full_name" style="text-align:center;">
+			    {% if row.user_hidden %}
+                    <span style="color:grey;">
+                        {% if row.user == user or can_admin %}
+                            {{ row.user.get_full_name }}
+			            {% else %}
+                            ?
+                        {% endif %}
+                    </span>
+			    {% else %}
+                    {{ row.user.get_full_name }}
+                {% endif %}
+            </td>
 
 			{% for score in row.scores %}
                 {% if score.user == user or can_admin %}
-				    <td class="r score{{ score|score_classes }}">{{ score.render_score_active }}</td>
+                    {% if score.is_hidden %}
+				        <td class="r score{{ score|score_classes }}">{{ score.render_score_hidden }}</td>
+				    {% else %}
+				        <td class="r score{{ score|score_classes }}">{{ score.render_score_active }}</td>
+                    {% endif %}				    
                 {% else %}
-                    <td class="r score{{ score|score_classes }}">{{ score.render_score }}</td>
+                    {% if not score.is_hidden %}
+                        <td class="r score{{ score|score_classes }}">{{ score.render_score }}</td>
+                    {% else %}
+                        <td class="r score{{ score|score_classes }}"></td>
+                    {% endif %}
                 {% endif %}
 			{% endfor %}
 

@@ -1,0 +1,29 @@
+{% extends "base-with-menu.html" %}
+{% load static compress %}
+{% load i18n %}
+
+{% block title %}{% trans "Privacy Settings" %}{% endblock %}
+
+{% block main-content %}
+
+<h3>{% trans "Privacy settings" %}</h3>
+
+<p>{% blocktrans %}
+You can hide your scores for particular tasks or your name, 
+but you can't hide sum of your points.
+Hiding it would make the ranking unreliable for those willing
+to compare their performance with other contestans.
+{% endblocktrans %}</p>
+
+<p>{% blocktrans %}
+Hidden elements will be still visible for you and contest admins.
+Privacy settings are contest-wide but might not apply to non-standard ranking types.
+{% endblocktrans %}</p>
+
+<form action="{% url 'ranking_privacy' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="{% trans "Save" %}">
+</form>
+
+{% endblock %}

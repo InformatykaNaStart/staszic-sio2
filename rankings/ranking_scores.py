@@ -2,6 +2,7 @@
 from oioioi.base.utils import RegisteredSubclassesBase, ObjectWithMixins
 from django.template import Context, Engine
 from django.utils.safestring import mark_safe
+from models import PrivacySettings
 
 class RankingScoreBase(RegisteredSubclassesBase, ObjectWithMixins):
     modules_with_subclasses = ['ranking_scores']
@@ -30,10 +31,15 @@ def fancy_score(score):
 class SingleScore(RankingScoreBase):
     score_template_active = Engine.get_default().from_string('<a href="{% url "submission" submission.pk %}">{{ score }}</a>')
     score_template_inactive = Engine.get_default().from_string('{{ score }}')
+    score_template_hidden = Engine.get_default().from_string('<a style="color:grey" href="{% url "submission" submission.pk %}">{{ score }}</a>')
 
     def __init__(self, user, submission, score):
         super(SingleScore, self).__init__(user, score)
         self.submission = submission
+
+    def is_hidden(self):
+        settings, _ = PrivacySettings.objects.get_or_create(user=self.user, contest=self.submission.problem_instance.contest)
+        return settings.hide_scores
 
     def render_score_from(self, template):
         return template.render(Context(dict(submission=self.submission, score=fancy_score(self.score))))
@@ -44,6 +50,8 @@ class SingleScore(RankingScoreBase):
     def render_score_active(self):
         return self.render_score_from(self.score_template_active)
 
+    def render_score_hidden(self):
+        return self.render_score_from(self.score_template_hidden)
 
     def __repr__(self):
         return u'<SingleScore user={} score={} submission={}>'.format(self.user, self.score, self.submission.pk)

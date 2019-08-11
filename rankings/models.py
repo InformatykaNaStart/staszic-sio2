@@ -5,6 +5,9 @@ from oioioi.base.fields import DottedNameField
 from django.utils.module_loading import import_string
 from oioioi.contests.models import Round
 from utils import stacked_inline_for
+from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
+
 # Create your models here.
 
 class StaszicRanking(models.Model):
@@ -128,10 +131,8 @@ class CachedRankingData(models.Model):
     data = models.BinaryField()
     ranking = models.ForeignKey(StaszicRanking)
 
-class RankingFilter(models.Model):
-    ranking = models.ForeignKey(StaszicRanking)
-    type_name = DottedNameField('staszic.rankings.ranking_filter.RankingFilterBase')
-
-class TimeFilterConfig(models.Model):
-    time = models.DateTimeField()
-    mode = models.CharField(max_length=8, choices=[('before', 'Before'), ('after', 'After')])
+class PrivacySettings(models.Model):
+    contest = models.ForeignKey('contests.Contest')
+    user = models.ForeignKey(User)
+    hide_scores = models.BooleanField(default=False, verbose_name=_('Hide scores'))
+    hide_name = models.BooleanField(default=False, verbose_name=_('Hide name'))
