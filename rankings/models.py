@@ -42,6 +42,11 @@ COLUMN_VISIBILITY_TYPES = [
     ('always', 'Visible after the round starts')
 ]
 
+ORDER_TYPES = [
+    ('max', 'maximum score'),
+    ('min', 'minimum score'),
+]
+
 class RoundRankingConfig(models.Model):
     ranking = models.OneToOneField(StaszicRanking)
 
@@ -51,8 +56,11 @@ class RoundRankingConfig(models.Model):
     contest_coef = models.IntegerField(default=0, verbose_name='All-time coefficient')
     contest_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, verbose_name='All-time scoring type', default='best')
 
+    order = models.CharField(max_length=3, choices=ORDER_TYPES, verbose_name='Best solution', default='max')
     column_visibility = models.CharField(max_length=8, choices=COLUMN_VISIBILITY_TYPES, default='end')
     trial_visibility = models.BooleanField(default=False, verbose_name='Trial round visibility')
+
+    ignore_submissions_after = models.DateTimeField(verbose_name='Ignore submissions after', null=True, blank=True)
 
     @property
     def dict_config(self):
@@ -64,6 +72,8 @@ class RoundRankingConfig(models.Model):
             contest_type = self.contest_type,
             visibility_type = self.column_visibility,
             trial_visibility = self.trial_visibility,
+            order = self.order,
+            ignore_submissions_after = self.ignore_submissions_after,
             )
 
 
@@ -76,6 +86,7 @@ class MultiroundRankingConfig(models.Model):
     contest_type = models.CharField(max_length=8, choices=SUBMISSION_TYPES, verbose_name='All-time scoring type', default='best')
 
     column_visibility = models.CharField(max_length=8, choices=COLUMN_VISIBILITY_TYPES, default='end')
+    ignore_submissions_after = models.DateTimeField(verbose_name='Ignore submissions after', null=True, blank=True)
 
     @property
     def dict_config(self):
@@ -85,6 +96,7 @@ class MultiroundRankingConfig(models.Model):
             contest_coef = self.contest_coef,
             contest_type = self.contest_type,
             visibility_type = self.column_visibility,
+            ignore_submissions_after = self.ignore_submissions_after,
             trial_visibility=True,
             )
 

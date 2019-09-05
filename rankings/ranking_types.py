@@ -166,8 +166,8 @@ class ContestRanking(RankingTypeBase):
         cfg.pop('round', None)
         if r == '':
             pis = ProblemInstance.objects.filter(round__contest=self.contest).order_by('round__start_date', 'short_name')
-            if self.config.dict_config['trial_visibility']:
-                pis.filter(round__is_trial)
+            if not self.config.dict_config['trial_visibility']:
+                pis = pis.filter(round__is_trial=False)
             for problem_instance in pis:
                 result.append(ProblemInstanceColumn(self.ranking, problem_instance, **cfg))
         else:

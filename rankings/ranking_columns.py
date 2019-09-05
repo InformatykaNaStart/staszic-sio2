@@ -28,13 +28,14 @@ class ProblemInstanceColumn(RankingColumnBase):
 
     header_template = Engine.get_default().from_string('<span title="{{ full_name }}"><a href="{{ pi_link }}">{{ short_name }}</a></span>')
 
-    def __init__(self, ranking, problem_instance, round_coef, round_type, contest_coef, contest_type, visibility_type, trial_visibility, start_date=None, end_date=None):
+    def __init__(self, ranking, problem_instance, round_coef, round_type, contest_coef, contest_type, visibility_type, trial_visibility, start_date=None, end_date=None, order='max', ignore_submissions_after=None):
         super(ProblemInstanceColumn, self).__init__(ranking)
         self.problem_instance = problem_instance
 
-        self.round_config = dict(type=round_type, coef=round_coef, start_date=start_date, end_date=end_date)
+        self.round_config = dict(type=round_type, coef=round_coef, start_date=start_date, end_date=end_date, order=order)
         self.contest_config = dict(type=contest_type, coef=contest_coef)
         self.visible_after = self.when_visible(problem_instance.round, visibility_type)
+        self.ignore_submissions_after = ignore_submissions_after
 
     def when_visible(self, round, type):
         if type == 'always':
@@ -59,13 +60,15 @@ class ProblemInstanceColumn(RankingColumnBase):
         )))
 
     def get_scores(self):
-        submissions = self.problem_instance.submission_set.filter(kind='NORMAL').exclude(score=None).order_by('-date').select_related()
+        submissions = self.problem_instance.submission_set.filter(kind='NORMAL')
+        if self.ignore_submissions_after: submissions = submissions.filter(date__lte=self.ignore_submissions_after)
+        submissions = submissions.exclude(score=None).order_by('-date').select_related()
         
         start_date = self.problem_instance.round.start_date
         end_date = self.problem_instance.round.end_date
 
-        round_scores = self.get_round_scores(submissions, self.round_config['type'], lambda x: (end_date and start_date <= x.date <= end_date) or (not end_date and start_date <= x.date))
-        contest_scores = self.get_round_scores(submissions, self.contest_config['type'], lambda x: start_date <= x.date)
+        round_scores = self.get_round_scores(submissions, self.round_config['type'], self.round_config['order'], lambda x: (end_date and start_date <= x.date <= end_date) or (not end_date and start_date <= x.date))
+        contest_scores = self.get_round_scores(submissions, self.contest_config['type'], self.round_config['order'], lambda x: start_date <= x.date)
 
         #start_date = self.round_config['start_date']
         #end_date = self.round_config['end_date']
@@ -78,12 +81,12 @@ class ProblemInstanceColumn(RankingColumnBase):
                 ('alltime', contest_scores, self.contest_config['coef'])
             )
 
-    def get_round_scores(self, qs, type, filter):
+    def get_round_scores(self, qs, type, order, filter):
         result = dict()
         #raise RuntimeError([(x.date, filter(x)) for x in qs])
         for sub in qs:
             if filter(sub):
-                self.put_score(result, type, self.score_for_sub(sub))
+                self.put_score(result, type, order, self.score_for_sub(sub))
         
         return result
 
@@ -93,17 +96,23 @@ class ProblemInstanceColumn(RankingColumnBase):
         else:
             return SingleScore(sub.user, sub, round(sub.score.value*sub.problem_instance.score_weight, 2))
 
-    def put_score(self, container, type, score):
-        if self.better_score(container.get(score.user, None), type, score):
+    def put_score(self, container, type, order, score):
+        if self.better_score(container.get(score.user, None), type, order, score):
             container[score.user] = score
 
-    def better_score(self, orig, type, new):
+    def better_score(self, orig, type, order, new):
         if orig is None: return True
         if type == 'last': return False
-        if type == 'best': return new.score > orig.score
-        if type == 'rlast': return new.score > orig.score and new.submission.is_revealed
+        if type == 'best': return self.in_order(order, new.score, orig.score)
+        if type == 'rlast': return self.in_order(order, new.score, orig.score) and new.submission.is_revealed
 
         assert False
+
+    def in_order(self, order, new, orig):
+        if order == 'max':
+            return new > orig
+        else:
+            return new < orig
 
     def combine_scores(self, *args):
         result = dict()
