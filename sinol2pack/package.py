@@ -15,13 +15,14 @@ class Sinol2Package(SinolPackage):
         self._save_hooks()
 
     def _save_hooks(self):
-        hooks_file = self.config.get('hooks_file', None)
-        if hooks_file is not None:
-            hooks_path = os.path.join(self.rootdir, hooks_file)
-            if os.path.isfile(hooks_path):
-                hooks_obj = ProblemHooks(problem=self.problem)
-                hooks_obj.content.save(self.short_name + '.hooks.py',
-                        File(open(hooks_path, 'rb')))
+        hooks = self.config.get('hooks', None)
+        if hooks is not None:
+            for hook_name, hook_file in hooks.items():
+                hook_path = os.path.join(self.rootdir, hook_file)
+                if os.path.isfile(hook_path):
+                    hook_obj = ProblemHooks(problem=self.problem, type=hook_name)
+                    hook_obj.content.save('{problem}.{hook}.hook'.format(problem=self.short_name, hook=hook_name),
+                            File(open(hook_path, 'rb')))
 
 
 class Sinol2PackageBackend(SinolPackageBackend):
@@ -44,6 +45,7 @@ class Sinol2PackageBackend(SinolPackageBackend):
         f = tar.extractfile(the_file)
         config = yaml.load(f.read())
         f.close()
-
+        
+        print('sinol2', config.get('type', None) == 'sinol2')
         return config.get('type', None) == 'sinol2'
 
