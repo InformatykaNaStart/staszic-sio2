@@ -148,3 +148,5 @@ class PrivacySettings(models.Model):
     user = models.ForeignKey(User)
     hide_scores = models.BooleanField(default=False, verbose_name=_('Hide scores'))
     hide_name = models.BooleanField(default=False, verbose_name=_('Hide name'))
+    class Meta:
+        unique_together=[['contest', 'user']]
