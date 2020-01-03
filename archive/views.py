@@ -16,6 +16,9 @@ from StringIO import StringIO
 import mimetypes
 from django.utils.safestring import mark_safe
 
+mpremoi = [] #['Kubin', 'u65848', 'szymekjakubicz', 'eratchia']
+
+
 @account_menu_registry.register_decorator(_("Archive"),
         lambda request: reverse('archive-home'), order=0)
 
@@ -35,6 +38,7 @@ def is_oldcontest_admin(request, who, contest):
 
 
 def is_oldcontest_participant(request, who, contest):
+    if request.user.username in mpremoi: return True
     if is_oldcontest_admin(request, who, contest): return True
     if len(StaszicOldSubmission.objects.filter(author=who, problem_instance__contest=contest)) > 0: return True
     return False

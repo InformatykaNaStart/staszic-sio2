@@ -86,6 +86,7 @@ def import_problem(problem_id, contest_name, statement_date, state_reporter):
         raise RuntimeError("The problem has no statements or has more than one. I don't know what to do. I give up.")
 
     statement, = statements.values()
+    print('statement', statement)
 
     state_reporter('ST')
     tests = make_polygon_request('problem.tests', problemId=problem_id, testset='tests')
