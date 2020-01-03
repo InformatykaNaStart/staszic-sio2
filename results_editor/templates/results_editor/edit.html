@@ -23,15 +23,11 @@ td.xsubmission {
                 <label for="id_comment">{% trans "Comment" %}</label><br>
                 <textarea class="form-control" id="id_comment" name="comment">{{submission.comment}}</textarea>
             </div>
-            {% if submission.score %}
-                <div class="form-group ">
+                <div class="form-group">
                     <label for="id_score">{% trans "Score" %}</label><br>
                     <input type="number" id="id_score" name="score" value="{{submission.score}}" />
                 </div>
-            {% else %}
-                <input type="hidden" id="id_score" name="score" value="0"/>
-            {% endif %}
-            <div class="form-group"">
+            <div class="form-group">
                 <label for="id_status">{% trans "Status" %}</label><br>
                 <select id="id_status"  name="status">
                     {% for s in statuses %}

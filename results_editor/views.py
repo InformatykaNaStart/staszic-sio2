@@ -14,7 +14,7 @@ from oioioi.base.permissions import enforce_condition
 from oioioi.problems.utils import can_admin_instance_of_problem
 from oioioi.contests.models import submission_statuses
 from oioioi.programs.models import ProgramSubmission
-
+from oioioi.contests.scores import IntegerScore
 import forms
 
 @enforce_condition(~contest_exists | can_enter_contest)
@@ -27,8 +27,10 @@ def edit_view(request, submission_id):
         if request.method == 'POST':
             form = forms.EditResultsForm(request.POST)
             if form.is_valid():
-                if submission.score is not None:
-                    submission.score.value = form.cleaned_data['score']
+                if form.cleaned_data['score'] is None:
+                    submission.score = None
+                else:
+                    submission.score = IntegerScore(form.cleaned_data['score'])
                 submission.status, submission.comment  = form.cleaned_data['status'], form.cleaned_data['comment'].strip(), 
                 submission.save()
                 return redirect('submission', contest_id=request.contest.id, submission_id=submission.id)
