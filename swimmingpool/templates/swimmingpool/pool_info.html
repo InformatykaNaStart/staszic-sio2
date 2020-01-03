@@ -1,0 +1,75 @@
+{% extends "base-with-menu.html" %}
+{% block title %}Zapisy na basen{% endblock %}
+
+{% block main-content %}
+
+<fieldset><legend>Zapisy na basen</legend>
+<p>Zapisy na dzień {{ day|date:"d.m.Y" }}</p>
+{% if ticket %}
+<p>Jesteś już zapisany w kolejce. Masz <strong>{{ ticket.position }}</strong> miejsce w kolejce.</p>
+{% else %}
+<p>Nie jesteś jeszcze zapisany do kolejki.</p>
+{% endif %}
+<div id="form-actions">
+    {% if not ticket %}<a href="{% url "staszic-pool-up" %}" class="btn btn-primary">Zapisz się</a>{% endif %}
+    {% if ticket %}<a href="{% url "staszic-pool-down" %}" class="btn btn-danger">Wypisz się</a>{% endif %}
+</div>
+</fieldset>
+
+{% if user.is_superuser %}
+
+<fieldset><legend>Lista zapisanych</legend>
+<p>Ta lista jest widoczna tylko dla adminów.</p>
+<table class="table">
+   <thead>
+       <tr>
+           <th>Poz.</th>
+           <th>Imię i nazwisko</th>
+           <th>Czas zapisu</th>
+       </tr>
+   </thead>
+   <tbody>
+       {% for ticket in list %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ ticket.user.get_full_name }} ({{ticket.user}})</td>
+            <td>{{ ticket.moment|date:"H:i:s" }}</td>
+        </tr>
+       {% endfor %}
+   </tbody>
+</table>
+</legend>
+<fieldset><legend>Czarna lista</legend>
+<table class="table">
+   <thead>
+       <tr>
+           <th>Imię i nazwisko</th>
+           <th>Przyczyna</th>
+           <th>Odblaklistuj</th>
+       </tr>
+   </thead>
+   <tbody>
+       {% for blacklist in blist %}
+        <tr>
+            <td>{{ blacklist.user.get_full_name }}</td>
+            <td>{{ blacklist.reason }}</td>
+            <td><a href="{% url "staszic-bl-del" blacklist.pk %}" class="btn">Oczyść z zarzutów</a></td>
+        </tr>
+       {% endfor %}
+   </tbody>
+</table>
+</legend>
+
+<form action="{% url "staszic-bl-ins" %}" method="post" class="form-horizontal" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset><legend>Blacklistowanie człowieka</legend>
+        {% include 'ingredients/form.html' with form=bl_form %}
+        <div id="form-actions">
+        <p><button class="btn btn-primary">Zblacklistuj</button></p>
+        </div>
+    </fieldset>
+</form>
+
+{% endif %}
+{% endblock %}
+
