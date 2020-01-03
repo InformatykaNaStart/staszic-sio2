@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+message GetSubmissionRequest {
+	string contest = 1;
+	repeated string problems = 2;
+};
+
+message GetSubmissionResponse {
+	int64 id = 1;
+	string problem = 4;
+	string language = 2;
+	bytes source_code = 3;
+};
+
+message PostResultsRequest {
+	int64 submission_id = 1;
+	string failure_text = 9;
+	Status status = 2;
+	string compiler_output = 3;
+
+	bool has_score = 10;
+	int64 score = 4;
+
+	bool has_max_score = 11;
+	int64 max_score = 5;
+	repeated GroupResult groups = 6;
+	repeated TestResult tests = 7;
+	string comment = 8;
+};
+
+message PostResultsResponse {};
+
+enum Status {
+	UNKNOWN = 0;
+	OK  = 1;
+	WA  = 2;
+	RE  = 3;
+	TLE = 4;
+	MLE = 5;
+	OLE = 6;
+	SE  = 7;
+	RV  = 8;
+	CE  = 9;
+	NJ  =10;
+};
+
+message TestResult {
+	string name = 1;
+	string group_name = 2;
+	int64 time_limit = 3; // in milliseconds
+	int64 max_score = 4;
+
+	Status status = 5;
+	int64 score = 6;
+	int64 time_used = 7; // in milliseconds
+	string comment = 8;
+};
+
+message GroupResult {
+	string name = 1;
+	int64 score = 2;
+	int64 max_score = 3;
+	Status status = 4;
+};
