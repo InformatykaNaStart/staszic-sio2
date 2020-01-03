@@ -24,3 +24,11 @@ class PythonProgrammingLanguage(ProgrammingLanguageBase):
 class HaskellProgrammingLanguage(ProgrammingLanguageBase):
     description = 'Haskell'
     extensions = ['hs']
+
+class ZipProgrammingLanguage(ProgrammingLanguageBase):
+    description = 'Zip'
+    extensions = ['zip']
+
+class OCamlProgrammingLanguage(ProgrammingLanguageBase):
+    description = 'OCaml'
+    extensions = ['ml']
