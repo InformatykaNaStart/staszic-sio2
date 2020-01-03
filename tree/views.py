@@ -24,7 +24,7 @@ def contests_tree_view(request):
                 groups[cgroup] = [contest]
             else:
                 groups[cgroup].append(contest)
-
+            groups[cgroup] = sorted(groups[cgroup], key=lambda contest: contest.id)
     to_show = sorted(groups.items(), key=lambda x: -x[0].order)
 
     return render(request, 'tree/tree.html',
