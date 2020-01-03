@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from staszic.feedback.utils import get_stats_from_judging
 from staszic.feedback.models import SmartJudgeConfig
 from oioioi.contests.utils import can_admin_contest
+from django.conf import settings
 
 class ParticipantsControllerWithACL(ParticipantsController):
     def can_enter_contest(self, request):
@@ -118,6 +119,13 @@ class StaszicContestController(OIContestController):
             return getattr(contest, 'judgingconfig', SmartJudgeConfig()).mode in ['all', 'pro']
         except:
             return False
+
+    @classmethod
+    def filter_visible_contests(cls, request, contests):
+        if request.user.is_superuser: return contests
+
+
+        return contests
 
 class StaszicOpenController(StaszicContestController):
     description = 'Staszic otwarty'
