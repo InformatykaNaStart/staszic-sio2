@@ -22,7 +22,7 @@ def linkjoin_view(request, magic):
     link = get_object_or_404(Link, magic=magic)
     if link.expiration_date and link.expiration_date < timezone.now():
         raise PermissionDenied(_('This link has expired.'))
-    if not link.link_active:
+    if not link.active:
         raise PermissionDenied(_('This link is not active.'))
     contest = link.contest
     if Participant.objects.filter(contest=contest, user=request.user):
