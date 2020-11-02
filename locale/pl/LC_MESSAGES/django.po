@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-11 20:10+0000\n"
+"POT-Creation-Date: 2020-11-02 22:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr "Hasło"
 #: archive/templates/archive/problems.html:6
 #: archive/templates/archive/problems.html:18
 #: archive/templates/archive/submissions.html:5
-#: archive/templates/archive/submissions.html:17 archive/views.py:19
+#: archive/templates/archive/submissions.html:17 archive/views.py:22
 msgid "Archive"
 msgstr "Archiwum"
 
@@ -122,12 +122,12 @@ msgid "Problem"
 msgstr "Zadanie"
 
 #: archive/templates/archive/submissions.html:37
-#: results_editor/templates/results_editor/edit.html:35
+#: results_editor/templates/results_editor/edit.html:31
 msgid "Status"
 msgstr "Status"
 
 #: archive/templates/archive/submissions.html:38 results_editor/forms.py:6
-#: results_editor/templates/results_editor/edit.html:28
+#: results_editor/templates/results_editor/edit.html:27
 msgid "Score"
 msgstr "Wynik"
 
@@ -139,16 +139,49 @@ msgstr "Pobierz kod"
 msgid "Not judged"
 msgstr ""
 
+#: linkjoin/admin.py:26
+msgid "Join links"
+msgstr "Dołączanie przez link"
+
+#: linkjoin/models.py:30
+msgid "Expiration date"
+msgstr "Data wygaśnięcia"
+
+#: linkjoin/models.py:31 results_editor/forms.py:8
+#: results_editor/templates/results_editor/edit.html:23
+msgid "Comment"
+msgstr "Komentarz"
+
+#: linkjoin/models.py:32
+msgid "Link active"
+msgstr "Link aktywny"
+
+#: linkjoin/views.py:17
+msgid "Please wait a few moments and try again."
+msgstr "Proszę spróbować ponownie za chwilę."
+
+#: linkjoin/views.py:24
+msgid "This link has expired."
+msgstr "Link wygasł."
+
+#: linkjoin/views.py:27
+msgid "You are already registered to this contest."
+msgstr "Jesteś już zarejestrowany/a do tego konkursu."
+
+#: linkjoin/views.py:30
+msgid "You were successfully registered to the contest."
+msgstr "Zostałeś/aś poprawnie zarejestrowana do konkursu."
+
 #: new_acm/templates/new_acm/acm.html:9
 #: rankings/templates/rankings/table.html:9
 msgid "User"
 msgstr "Użytkownik"
 
-#: rankings/models.py:137
+#: rankings/models.py:149
 msgid "Hide scores"
 msgstr "Ukryj punkty"
 
-#: rankings/models.py:138
+#: rankings/models.py:150
 msgid "Hide name"
 msgstr "Ukryj imię i nazwisko"
 
@@ -168,7 +201,7 @@ msgid "Privacy Settings"
 msgstr "Ustawienia prywatności"
 
 #: rankings/templates/rankings/privacy.html:9
-#: rankings/templates/rankings/ranking.html:28
+#: rankings/templates/rankings/ranking.html:29
 msgid "Privacy settings"
 msgstr "Ustawienia prywatności"
 
@@ -262,11 +295,6 @@ msgstr "Metadane isolate"
 #: reports/templates/reports/modal.html:65
 msgid "Standard error stream"
 msgstr "Strumień błędów"
-
-#: results_editor/forms.py:8
-#: results_editor/templates/results_editor/edit.html:23
-msgid "Comment"
-msgstr "Komentarz"
 
 #: results_editor/templates/programs/submission_header.html:8
 msgid "Edit result"
