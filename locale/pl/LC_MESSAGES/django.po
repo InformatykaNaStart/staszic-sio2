@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 22:57+0000\n"
+"POT-Creation-Date: 2020-11-02 23:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -164,11 +164,16 @@ msgstr "Proszę spróbować ponownie za chwilę."
 msgid "This link has expired."
 msgstr "Link wygasł."
 
-#: linkjoin/views.py:27
+#: linkjoin/views.py:26
+#| msgid "This link has expired."
+msgid "This link is not active."
+msgstr "Link nie jest aktywny."
+
+#: linkjoin/views.py:29
 msgid "You are already registered to this contest."
 msgstr "Jesteś już zarejestrowany/a do tego konkursu."
 
-#: linkjoin/views.py:30
+#: linkjoin/views.py:32
 msgid "You were successfully registered to the contest."
 msgstr "Zostałeś/aś poprawnie zarejestrowana do konkursu."
 
