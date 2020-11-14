@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "simple-centered.html" %}
 {% load i18n %}
 
 {% block styles %} {{ block.super }} 
@@ -9,11 +9,9 @@
 </style>
 {% endblock %}
 {% block title %} {{title}} {% endblock %}
-{% block body %}
-
-    <div style="margin-left:5%; margin-right:5%">
-    {{ doc }}
+{% block content %}
+    <div style="max-width: 100em; text-align: left;">
+        {{ doc }}
     </div>
-
 {% endblock %}
 

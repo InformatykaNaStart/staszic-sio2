@@ -18,27 +18,40 @@ Zapewniamy przejrzystość przetwarzania danych osobowych. Dbamy o to, by dane b
 Przetwarzając dane osobowe, zapewniamy ich bezpieczeństwo i poufność oraz dostęp do informacji o przetwarzaniu osobom, których dane dotyczą. Gdyby, pomimo stosowanych środków bezpieczeństwa, doszło do naruszenia ochrony danych osobowych (np. „wycieku” danych lub ich utraty), poinformujemy o takim zdarzeniu osoby, których dane dotyczą, w sposób zgodny z przepisami. 
  
 ## 3. W jakich celach, na jakiej podstawie prawnej, w jaki sposób i przez jaki czas przetwarzamy Twoje dane?
+
+**Cel**
  
 Przetwarzamy twoje dane osobowe w celu organizacji konkursów programistycznych w serwisie sio2.staszic.waw.pl.
 
 W szczególności przetwarzanie danych osobowych jest niezbędne, aby serwis sio2.staszic.waw.pl mógł pamiętać historię zgłoszonych przez Ciebie rozwiązań i wyników, jakie uzyskałeś(aś) w konkursach.
 
-To Ty decydujesz, do których konkursów chcesz przystąpić. W ramach danego konkursu inni uczestnicy widzą jedynie sumaryczne wyniki nadesłanych przez Ciebie rozwiązań (przypisane do Ciebie za pomocą loginu lub imienia i nazwiska, zależnie od tego jaką opcję wybrałeś przystępując do konkursu) oraz zadane przez Ciebie pytania. Administrator konkursu widzi dotakowo treść nadesłanych przez Ciebie rozwiązań oraz ich wyniki cząstkowe, ma też możliwość wglądu w Twoje imię, nazwisko oraz adres email, na wypadek gdyby potrzebował się z Tobą skontaktować.
-
-Tylko administratorzy całego serwisu zajmujący się jego konserwacją mają dostęp do kompletu Twoich danych osobowych gromadzonych w serwisie, ale zakres przetwarzania przez nich Twoich danych obejmuje jedynie zapewnienie, że Twoje dane są bezpieczne (archiwizację i ew. przywracanie) oraz realizację wymienionych w pkt 4 poniżej przysługujących Ci praw (np. wykonanie eksportu Twoich danych osobowych czy usunięcie Twoich danych osobowych z kopii bezpieczeństwa po usunięciu przez Ciebie konta w serwisie).
-
 Twoje dane osobowe mogą być również przetwarzane w celu dochodzenia lub obrony roszczeń związanych z twoim korzystaniem z serwisu sio2.staszic.waw.pl na podstawie art. 6 ust. 1 lit. f. RODO, co stanowi prawnie uzasadniony interes Administratora twoich danych.
+
+**Podstawa prawna**
 
 Podanie przez Ciebie Twoich danych osobowych jest dobrowolne. Konsekwencją niepodania danych osobowych będzie niemożliwość zarejestrowania się jako użytkownik serwisu sio2.staszic.waw.pl. 
 
-Odbiorcą Twoich danych osobowych będą osoby upoważnione przez Administratora do przetwarzania danych osobowych w ramach wykonywania swoich obowiązków służbowych oraz podmioty, którym Administrator zleca wykonywanie czynności, z którymi wiąże się konieczność przetwarzania danych. W szczególności podmioty świadczące na naszą rzecz usługi administrowanie systemem informatycznym i dostawców narzędzi elektronicznych służących do przechowywania danych.
+**Sposób**
 
-Twoje dane osobowe będą przechowywane do czasu usunięcia przez Ciebie konta z serwisu, a po jego upływie przez okres przedawnienia ewentualnych roszczeń oraz w zakresie wymaganym przez przepisy prawa powszechnie obowiązującego.
+Odbiorcą Twoich danych osobowych będą osoby upoważnione przez Administratora do przetwarzania danych osobowych w ramach wykonywania swoich obowiązków służbowych oraz podmioty, którym Administrator zleca wykonywanie czynności, z którymi wiąże się konieczność przetwarzania danych. W szczególności są to podmioty świadczące na naszą rzecz usługi administrowanie systemem informatycznym i dostawców narzędzi elektronicznych służących do przechowywania danych.
 
 Twoje dane osobowe nie będą przetwarzane w sposób zautomatyzowany oraz nie będą poddawane profilowaniu. 
 
 Twoje dane osobowe nie będą przekazywane poza Europejski Obszar Gospodarczy ani organizacji międzynarodowej. 
+
+Twoje dane widoczne są dla innych użytkowników serwisu w następującym zakresie:
+
+* Jeśli jesteś programistą (patrz definicje w [regulaminie](/docs/regulamin)):
+    * Pozostali programiści w konkursie, do którego przystąpiłeś, widzą jedynie wyniki nadesłanych przez Ciebie rozwiązań (wyświetlane na stronie *rankingi* danego konkursu). Zależnie od Twojej decyzji (przycisk *ustawienia prywatności* na stronie *rankingi*) w rankingu podawany jest albo Twój login albo imię i nazwisko. Możesz również zdecydować, czy w rankingu podawany będzie jedynie sumaryczny wynik każdego z Twoich rozwiązań, czy także wyniki cząstkowe za poszczególne testy.
+    * Administratorzy konkursu, do którego przystąpiłeś, widzą Twój login, imię, nazwisko, email oraz wszystkie rozwiązania, które wysłałeś w danym kokursie wraz z ich wynikami. Widzą oni również zadane przez Ciebie w danym konkursie pytania.
+    * To Ty decydujesz, do których konkursów przystąpisz, a programiści i administratorzy danego konkursu widzą opisane wyżej dane dopiero po tym, jak do danego konkursu przystąpisz (i tylko w ramach tego jednego konkursu).
+* Jeśli jesteś administratorem konkursu (patrz definicje w [regulaminie](/docs/regulamin)) Twoje imię i nazwisko widoczne jest przy wszystkich ogłoszeniach i odpowiedziach na pytania, które publikujesz.
+* Administratorzy całego serwisu mają dostęp do wszysktich danych przechowywanych w serwisie, ale przetwarzają je tylko w celu zapewnienia poprawnego działania serwisu od strony technicznej (przeprowadzania archiwizacji/przywracania danych, rozwiązywanie problemów technicznych zgłoszonych przez użytkowników).
+
+**Czas**
  
+Twoje dane osobowe będą przechowywane do czasu usunięcia przez Ciebie konta z serwisu, a po jego upływie przez okres przedawnienia ewentualnych roszczeń oraz w zakresie wymaganym przez przepisy prawa powszechnie obowiązującego.
+
 ## 4. Jakie są Twoje prawa w związku z przetwarzaniem przez nas Twoich danych osobowych?
 
 Masz prawo żądania:

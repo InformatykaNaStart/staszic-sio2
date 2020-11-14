@@ -15,22 +15,21 @@
 3. *Programista* – *Użytkownik* *Serwisu* upoważniony przez *Operatora* do brania udziału w *Konkursach*. Uprawnienie to jest automatycznie nadawane w momencie *Aktywacji Konta*.
 4. *Administrator Konkursów* – *Użytkownik* *Serwisu* upoważniony przez *Operatora* do tworzenia i administrowania *Konkursami*. *Administrator Konkursów* administruje jedynie *Konkursami*, które sam stworzył oraz takimi, w których uprawnienia administratora zostały mu nadane przez *Operatora*.
 5. *Zadanie* – zadanie programistyczne/algorytmiczne dodane do Serwisu przez *Administratora Konkursów*. Zadania grupowane są w *Konkursy* przez *Adminstratorów Konkursów*, a następnie rozwiązywane przez *Programistów*.
-6. *Konkurs* – zestaw zadań ułożony przez *Adminstratora Konkursów*, przeznaczony do rozwiązania przez *Programistów*. W ramach *Konkursu* prowadzony jest ranking przesłanych przez *Programistów* rozwiązań. Dołączając do *Konkursu* *Programista* ma możliwość wyboru, czy w liście uczestników oraz rankingu *Konkursu* wyświetlana będzie jego *Login* czy  imię i nazwisko.
-    a. *Konkurs prywatny* - *Konkurs*, którego ranking wyników widoczny jest tylko dla uczestników oraz administratorów danego *Konkursu*. Aby stać się uczestnikiem *Konkursu Prywatnego*  należy skorzystać z linku aktywacyjnego udostępnionego przez administratora danego *Konkursu* (dystrybucja linków aktywacyjnych odbywa się poza *Serwisem*).
-    b. *Konkurs publiczny* - *Konkurs*, którego ranking wyników widoczne są publicznie w *Serwisie* (także dla osób niebędących *Użytkownikami* *Serwisu*). Lista *Konkursów Publicznych* wyświetlana jest na stronie głównej *Serwisu* i dołączyć do nich może każdy *Programista*.
+6. *Konkurs* – zestaw zadań ułożony przez *Adminstratora Konkursów*, przeznaczony do rozwiązania przez *Programistów*. W ramach *Konkursu* prowadzony jest *Ranking* przesłanych przez *Programistów* rozwiązań.
 7. *Serwis* – serwis internetowy dostępny pod adresem https://sio2.staszic.waw.pl. 
 8. *Rejestracja* – jednorazowa czynność polegająca na wypełnieniu przez *Użytkownika* formularza rejestracji i utworzenia konta w *Serwisie*.
 9. *Aktywacja Konta* – czynność wykonywana przez *Użytkownika* po *Rejestracji*, polegająca na skorzystaniu z linku aktywacyjnego przesłanego przez *Operatora* na adres e-mail *Użytkownika*. Korzystanie z wszelkich funkcjonalności *Serwisu* poza *Rejestracją* i *Aktywacją Konta* możliwe jest dopiero po *Aktywacji Konta*.
 10. *Konto Użytkownika* - wszelkie dane *Użytkownika* przetwarzane w *Serwisie* z wyłączeniem dodanych przez niego do *Serwisu* *Zadań* i stworzonych przez niego w *Serwisie* *Konkursów*.
 11. *Umowa* – umowa pomiędzy *Użytkownikiem* a *Operatorem* o świadczenie Usług drogą elektroniczną zawierana w momencie *Rejestracji* i akceptacji Regulaminu przez *Użytkownika*.
 12. *Login* - unikalny identyfikator *Użytkownika* w *Serwisie*. *Login* tworzony jest w procesie *Rejestracji*.
+13. *Ranking* - ranking rozwiązań nadesłanych w danym *Konkursie*. *Ranking* widoczny jest jedynie dla *Programistów* i *Administratorów Konkursu* danego *Konkursu*.
 
 ## §3 Warunki świadczenia Usługi
 
 1. Na podstawie niniejszego Regulaminu *Operator* prowadzi *Serwis* w celu świadczenia usługi.
 2. W ramach *Serwisu* *Operator* może udostępniać *Użytkownikom* następujące funkcjonalności:
-    a. *Programista* - możliwość rozwiązywania *Zadań* w ramach *Konkursów*,
-    b. *Administrator Konkursu* - możliwość tworzenia *Konkursów* i administrowania nimi (w tym dodawania *Zadań*).
+    a. *Programista* - możliwość nadsyłania rozwiązań *Zadań* w ramach *Konkursów* i zadawania pytań *Administratorom Konkursów*,
+    b. *Administrator Konkursu* - możliwość tworzenia *Konkursów* i administrowania nimi (w tym, dodawania *Zadań*, odpowiadania na pytania *Programistów*, publikacji ogłoszeń).
 3. Każdy *Użytkownik* będący *Programistą* może korzystać z *Serwisu* bez żadnych ograniczeń, z zastrzeżeniem postanowień niniejszego Regulaminu.
 4. *Użytkownik*, który chciałby uzyskać uprawnienia *Administratora Konkursów*, powinien skontaktować się mailowo z *Operatorem* po *Aktywacji Konta*. Uprawnienie to jest przyznawane według uznania *Operatora* i nie podlega reklamacjom.
 5. *Operator* zezwala *Administratorom Konkursów* na tworzenie nieograniczonej liczby *Konkursów* i dodawanie nieograniczonej liczby *Zadań* w ramach *Serwisu*.
