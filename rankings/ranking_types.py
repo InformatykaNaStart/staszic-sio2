@@ -123,7 +123,7 @@ class AdvancedRanking:
 
     @classmethod
     def get_admin_inlines(cls):
-        x = super(AdvancedRanking, cls).get_admin_inlines()+[stacked_inline_for(AdvancedRankingConfig, cls, dict(can_delete=True, can_add=True, min_num=0, extra=0))]
+        x = super(AdvancedRanking, cls).get_admin_inlines()+[stacked_inline_for(AdvancedRankingConfig, cls, dict(can_delete=True, can_add=True))]
         return x
 
     @property
@@ -146,12 +146,12 @@ class AdvancedRanking:
 
 
 class ContestRanking(RankingTypeBase):
-    description = 'Ranking'
+    description = 'Contest ranking'
     type_id = 'contest_ranking'
 
     @classmethod
     def get_admin_inlines(cls):
-        return super(ContestRanking, cls).get_admin_inlines() + [stacked_inline_for(RoundRankingConfig, cls)]
+        return super(ContestRanking, cls).get_admin_inlines() + [stacked_inline_for(RoundRankingConfig, cls, dict())]
 
     @property
     def config(self):
@@ -182,7 +182,7 @@ class MultiroundRanking(RankingTypeBase):
 
     @classmethod
     def get_admin_inlines(cls):
-        return super(MultiroundRanking, cls).get_admin_inlines() + [stacked_inline_for(MultiroundRankingConfig, cls), RoundInRankingInline]
+        return super(MultiroundRanking, cls).get_admin_inlines() + [stacked_inline_for(MultiroundRankingConfig, cls, dict()), RoundInRankingInline]
 
     @property
     def config(self):

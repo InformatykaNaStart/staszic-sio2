@@ -5,6 +5,8 @@ from django.template import Engine, Context
 from oioioi.contests.views import problem_statement_view
 from django.core.urlresolvers import reverse
 from oioioi.contests.utils import is_contest_admin
+from oioioi.contests.models import RoundTimeExtension
+from datetime import timedelta
 
 class RankingColumnBase(RegisteredSubclassesBase, ObjectWithMixins):
     modules_with_subclasses = ['ranking_columns']
@@ -34,23 +36,34 @@ class ProblemInstanceColumn(RankingColumnBase):
 
         self.round_config = dict(type=round_type, coef=round_coef, start_date=start_date, end_date=end_date, order=order)
         self.contest_config = dict(type=contest_type, coef=contest_coef)
-        self.visible_after = self.when_visible(problem_instance.round, visibility_type)
+        self.visibility_type = visibility_type
+        #self.visible_after = self.when_visible(problem_instance.round, visibility_type)
         self.ignore_submissions_after = ignore_submissions_after
 
-    def when_visible(self, round, type):
+    def extension(self, user):
+        if not self.problem_instance: return 0
+        return max([0] + [e.extra_time for e in RoundTimeExtension.objects.filter(round=self.problem_instance.round, user=user)])
+
+    def when_visible(self, request):
+        type = self.visibility_type
+        round = self.problem_instance.round
+        extension = self.extension(request.user)
         if type == 'always':
             return round.start_date
         if type == 'end':
-            return round.end_date
+            if not round.end_date: return None
+            return round.end_date + timedelta(minutes=extension)
         if type == 'results':
-            return round.results_date
+            if not round.results_date: return None
+            return round.results_date + timedelta(minutes=extension)
         if type == 'none':
             return None
 
     def can_access(self, request):
         if request.user.is_superuser or is_contest_admin(request): return True
-        if self.visible_after is None: return False
-        return request.timestamp >= self.visible_after
+        when = self.when_visible(request)
+        if when is None: return False
+        return request.timestamp >= when
 
     def render_header(self):
         return self.header_template.render(Context(dict(
@@ -63,12 +76,12 @@ class ProblemInstanceColumn(RankingColumnBase):
         submissions = self.problem_instance.submission_set.filter(kind='NORMAL')
         if self.ignore_submissions_after: submissions = submissions.filter(date__lte=self.ignore_submissions_after)
         submissions = submissions.exclude(score=None).order_by('-date').select_related()
-        
+
         start_date = self.problem_instance.round.start_date
         end_date = self.problem_instance.round.end_date
 
-        round_scores = self.get_round_scores(submissions, self.round_config['type'], self.round_config['order'], lambda x: (end_date and start_date <= x.date <= end_date) or (not end_date and start_date <= x.date))
-        contest_scores = self.get_round_scores(submissions, self.contest_config['type'], self.round_config['order'], lambda x: start_date <= x.date)
+        round_scores = self.get_round_scores(submissions, self.round_config['type'], self.round_config['order'], lambda x, ext: (end_date and start_date <= x.date <= end_date + timedelta(minutes=ext)) or (not end_date and start_date <= x.date))
+        contest_scores = self.get_round_scores(submissions, self.contest_config['type'], self.round_config['order'], lambda x, ext: start_date <= x.date)
 
         #start_date = self.round_config['start_date']
         #end_date = self.round_config['end_date']
@@ -85,9 +98,8 @@ class ProblemInstanceColumn(RankingColumnBase):
         result = dict()
         #raise RuntimeError([(x.date, filter(x)) for x in qs])
         for sub in qs:
-            if filter(sub):
+            if filter(sub, self.extension(sub.user)):
                 self.put_score(result, type, order, self.score_for_sub(sub))
-        
         return result
 
     def score_for_sub(self, sub):

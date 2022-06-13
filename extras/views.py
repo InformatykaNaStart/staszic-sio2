@@ -8,11 +8,12 @@ from oioioi.base.permissions import enforce_condition, is_superuser
 from forms import ChangeSubLimitForm, ChangeStatementForm
 from django.core.exceptions import MultipleObjectsReturned
 from django.utils.http import urlencode
+from oioioi.contests.utils import is_contest_admin
 
 @contest_admin_menu_registry.register_decorator('Staszic extras',
     lambda request: reverse('staszic-extras', kwargs=dict(contest_id=request.contest.id)),
     order=240)
-@enforce_condition(is_superuser)
+@enforce_condition(is_contest_admin)
 def staszic_extras(request):
     change_statement_form = ChangeStatementForm(request=request)
     context = dict(
@@ -22,13 +23,13 @@ def staszic_extras(request):
 
     return render(request, 'extras/extras.html', context)
 
-@enforce_condition(is_superuser)
+@enforce_condition(is_contest_admin)
 def doesnt_need(request):
     request.contest.probleminstance_set.update(needs_rejudge=False)
     messages.success(request, "Done.")
     return redirect(reverse('staszic-extras'))
 
-@enforce_condition(is_superuser)
+@enforce_condition(is_contest_admin)
 def change_statement(request):
     form = ChangeStatementForm(request.POST, request.FILES, request=request)
     
@@ -56,7 +57,7 @@ def change_statement(request):
         messages.error(request, 'Wypełnij, proszę, formularz z należytą starannością.')
     return redirect(reverse('staszic-extras'))
 
-@enforce_condition(is_superuser)
+@enforce_condition(is_contest_admin)
 def change_sub_limit(request):
     form = ChangeSubLimitForm(request.POST)
     

@@ -31,6 +31,12 @@ class StaszicACM(StaszicContestController):
         environ['group_scorer'] = 'oioioi.acm.utils.acm_group_scorer'
         environ['test_scorer'] = 'oioioi.acm.utils.acm_test_scorer'
         environ['score_aggregator'] = 'oioioi.acm.utils.acm_score_aggregator'
+        pi = submission.problem_instance
+        if pi.contest.pk == 'wwi-2021-acm' and pi.short_name == 'd':
+            if Submission.objects.filter(problem_instance=pi, user=submission.user, date__lt=submission.date).count() < 5:
+                environ['score_aggregator'] = 'staszic.new_acm.utils.fail_acm_score_aggregator'
+                
+
         environ['report_kinds'] = ['FULL']
 
         super(StaszicACM, self). \

@@ -135,7 +135,7 @@ function()
     </div>
     {% endif %}
 
-    {% if request.user.is_superuser and who %}
+    {% if sio2dead_contests and who %}
     <div class="panel panel-default">
 
         <div class="panel-heading">
@@ -156,6 +156,7 @@ function()
         <div class="collapse" id="sio2dead">
         <table class="table">
             {% for record in sio2dead_contests %}
+                {% if record.short_name in perms %}
                 <tr>
                     <td style="width:30%; vertical-align:middle">
                         {{record.name}}
@@ -166,6 +167,7 @@ function()
                         </a>
                     </td>
                 </tr>
+                {% endif %}
             {% endfor %}
         </table>
         </div>

@@ -25,7 +25,7 @@ def has_rankings(request, *args, **kwargs):
 @enforce_condition(has_rankings & contest_exists & can_enter_contest & not_anonymous)
 def ranking_view(request, ranking_id=None):
     if ranking_id is None:
-        return redirect('ranking', ranking_id=StaszicRanking.objects.filter(contest=request.contest).earliest('pk').pk)
+        return redirect('ranking', ranking_id=StaszicRanking.objects.filter(contest=request.contest).latest('order').pk)
     else:
         ranking = get_object_or_404(StaszicRanking, pk=ranking_id, contest=request.contest)
 

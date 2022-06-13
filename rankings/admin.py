@@ -7,6 +7,7 @@ from oioioi.contests.admin import contest_site
 from oioioi.contests.menu import contest_admin_menu_registry
 from ranking_types import RankingTypeBase
 from ranking_renderers import RankingRendererBase
+from oioioi.contests.utils import is_contest_admin
 
 # Register your models here.
 
@@ -61,6 +62,16 @@ class RankingAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super(RankingAdmin, self).get_queryset(request)
         return qs.filter(contest = request.contest)
+
+    def has_add_permission(self, request):
+        return is_contest_admin(request)
+
+    def has_change_permission(self, request, obj=None):
+        return is_contest_admin(request)
+
+    def has_delete_permission(self, request, obj=None):
+        return self.has_change_permission(request, obj)
+
 
 contest_site.contest_register(StaszicRanking, RankingAdmin)
 

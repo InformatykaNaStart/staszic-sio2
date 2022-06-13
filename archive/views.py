@@ -33,11 +33,13 @@ def is_oldcontest_admin(request, who, contest):
     permissions = [p.contest.short_name for p in StaszicOldContestAdminPermission.objects.filter(user=who)]
     if getattr(who, 'is_superuser', False):
         permissions = [c.short_name for c in StaszicOldContest.objects.filter()]
+    print(permissions, contest.short_name)
     if contest.short_name in permissions: return True
     else: return False
 
 
 def is_oldcontest_participant(request, who, contest):
+    print('part')
     if request.user.username in mpremoi: return True
     if is_oldcontest_admin(request, who, contest): return True
     if len(StaszicOldSubmission.objects.filter(author=who, problem_instance__contest=contest)) > 0: return True
@@ -50,8 +52,7 @@ def is_oldproblem_admin(request, who, problem):
     for pi in StaszicOldProblemInstance.objects.filter(problem=problem):
         if pi.contest and is_oldcontest_admin(request, who, pi.contest): return True
     return False
-    
-    
+
 def can_see_oldproblem(request, who, problem):
     if is_oldproblem_admin(request, who, problem):
         return True
@@ -162,11 +163,12 @@ def download_source_code_view(request, submission_id):
 def problems_view(request, contest_id=None):
     if contest_id is None:
         return home_view(request)
-        
+    print('rproblems')
     who = get_object_or_404(StaszicOldUser, parent=request.user)
     contest = get_object_or_404(StaszicOldContest, short_name=contest_id)
     if not is_oldcontest_participant(request, who, contest):
-        return HttpResponseForbidden()    
+        print('oops')
+        #return HttpResponseForbidden()
     problems = StaszicOldProblemInstance.objects.filter(contest=contest).order_by('round')
     
     return render(request, 'archive/problems.html', {
@@ -179,8 +181,8 @@ def problems_view(request, contest_id=None):
 def problems_sio2dead_view(request, contest_id=None):
     if contest_id is None:
         return home_view(request)
-        
-    if not request.user.is_superuser:
+    contest = get_object_or_404(StaszicOldContest, short_name=contest_id)
+    if not request.user.is_superuser and not is_oldcontest_admin(request, get_object_or_404(StaszicOldUser, parent=request.user), contest):
         return HttpResponseForbidden()
     
     contest = get_object_or_404(StaszicOldContest, short_name=contest_id)

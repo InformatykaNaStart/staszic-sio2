@@ -18,15 +18,27 @@ function install_toggle() {
 $(document).ready(install_toggle);
 </script>
 
+<!--<div class="alert alert-danger">Trwają prace techniczne, zgłoszenia mogą sprawdzać się wolniej, wolno, wcale lub niepoprawnie. Za utrudnienia uprzejmie przepraszamy. SIO2 powinno wrócić do pełnej sprawności około godziny 11:30.</div>-->
 <table class="table">
     <thead>
         <tr><th style="width: 100px">{% trans "ID" %}</th><th>{% trans "Name" %}</th></tr>
     </thead>
     <tbody>
-        {% for group,contests in to_show %}
+        {% for indent,group,contests in tree %}
         <tr>
             <td colspan="2" style="text-align: center; font-weight:bold">
-                <a href="#" class="toggle-cg" data-cg="{{group.pk}}">{{group.name}}</a>
+                    {% for sup in group.path %}
+                        {% if not forloop.first %}
+                            <span style="color:gray; padding-left: 0.5em; padding-right:0.5em">/</span>
+                        {% endif %}
+                        {% if forloop.last %}
+                            <a href="#" class="toggle-cg" data-cg="{{group.pk}}">
+                                {{ sup.name }}
+                            </a>
+                        {% else %}
+                            <span style="color: gray"> {{ sup.name }} </span>
+                        {% endif %} 
+                    {% endfor %}
             </td>
         </tr>
         {% for contest in contests %}

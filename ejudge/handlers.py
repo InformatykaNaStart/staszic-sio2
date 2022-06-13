@@ -83,7 +83,7 @@ def PostResults(request):
     submission = ProgramSubmission.objects.get(pk=request.submission_id)
     submission.submissionreport_set.filter(status='ACTIVE').update(status='SUPERSEDED')
 
-    report = SubmissionReport.objects.create(submission=submission, status='ACTIVE', kind='FULL')
+    report = SubmissionReport.objects.create(submission=submission, status='ACTIVE', kind='NORMAL')
 
     if request.failure_text:
         HandleFailure(report, request.failure_text)
